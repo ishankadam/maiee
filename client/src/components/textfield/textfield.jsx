@@ -5,7 +5,7 @@ import {
   isValidPhoneNumber,
   validateEmail,
   validatePassword,
-} from "../../utils.js";
+} from "../../common.js";
 
 const Textfield = (props) => {
   const [textValue, setTextValue] = useState("");
