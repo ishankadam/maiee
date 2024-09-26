@@ -1,0 +1,63 @@
+/* Main container for the product form */
+.createjob-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Box that holds the form fields */
+.createjob-box {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for textfields inside the box */
+.createjob-box .MuiTextField-root {
+  margin-bottom: 16px;
+}
+
+/* Styling the dropdowns to match the form appearance */
+.createjob-box .MuiFormControl-root {
+  margin-bottom: 16px;
+}
+
+/* Custom checkbox container for alignment */
+.checkbox-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Checkbox with custom icon */
+.MuiCheckbox-root {
+  color: #33376f;
+}
+
+.MuiCheckbox-root.Mui-checked {
+  color: #33376f;
+}
+
+/* Image inside the checkbox */
+.checkbox-image img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+/* Add a bit more spacing between the buttons */
+.job-form-modal .MuiButton-root {
+  margin-right: 10px;
+}
+.checkbox-container {
+  display: flex;
+  justify-content: space-between; /* Adjusts the space between the checkboxes */
+  align-items: center; /* Aligns the checkboxes and labels vertically */
+  margin-top: 10px;
+}

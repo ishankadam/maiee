@@ -1,0 +1,43 @@
+.sidebar {
+  width: 250px;
+  padding: 10px;
+}
+
+.category-header {
+  font-size: 1.2rem !important;
+  color: #e55c35 !important; /* Custom color */
+  border-bottom: 1px solid #ee8e73;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+.MuiListItemText-root {
+  font-size: 1rem;
+  color: #333; /* Text color for items */
+}
+
+.MuiCollapse-root .MuiListItem-root {
+  padding-left: 30px;
+}
+
+.MuiListItem-root {
+  padding-left: 10px;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.MuiListItem-root:hover {
+  background-color: rgba(229, 92, 53, 0.1); /* Soft hover effect */
+}
+
+.highlighted {
+  background-color: rgba(
+    229,
+    92,
+    53,
+    0.3
+  ) !important; /* Highlight color for selected category */
+}
+
+.highlighted-subcategory {
+  background-color: #ffece5 !important; /* Highlight color for selected subcategory */
+}

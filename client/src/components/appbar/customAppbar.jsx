@@ -41,13 +41,15 @@ const CustomAppbar = () => {
             width: "100%",
           }}
         >
-          <div className="logo-wrapper">
+          <div
+            className="logo-wrapper"
+            onClick={() => handlePageChange("home")}
+          >
             <IconButton edge="start" color="inherit" aria-label="logo">
               <img
                 src={logo}
                 alt="logo"
                 style={{ height: "40px", marginRight: "10px" }}
-                onClick={() => handlePageChange("home")}
               />
             </IconButton>
           </div>

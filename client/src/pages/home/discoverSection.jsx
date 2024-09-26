@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid2, Typography } from "@mui/material";
 import React from "react";
 import discoverImage from "../../assets/discover.jpeg";
 import { discoverStats, discoverText } from "../../common";
@@ -13,9 +13,9 @@ const DiscoverSection = () => {
   return (
     <>
       <Box sx={{ padding: "50px 20px" }}>
-        <Grid container spacing={4} alignItems="center">
+        <Grid2 container spacing={4} alignItems="center">
           {/* Image Section */}
-          <Grid item xs={12} md={4}>
+          <Grid2 item size={{ xs: 12, md: 4 }}>
             <Box
               component="img"
               src={discoverImage}
@@ -26,10 +26,14 @@ const DiscoverSection = () => {
                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
               }}
             />
-          </Grid>
+          </Grid2>
 
           {/* Text Section */}
-          <Grid item xs={12} md={6} sx={{ marginLeft: { xs: 0, md: 4 } }}>
+          <Grid2
+            item
+            size={{ xs: 12, md: 6 }}
+            sx={{ marginLeft: { xs: 0, md: 4 } }}
+          >
             <Typography
               variant="h4"
               component="h2"
@@ -41,14 +45,19 @@ const DiscoverSection = () => {
             <Typography variant="body1" paragraph>
               {formattedText}
             </Typography>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
       <Box sx={{ backgroundColor: "#EAEAFB", padding: "20px 0" }}>
-        <Grid container justifyContent="center" alignItems="center" spacing={2}>
+        <Grid2
+          container
+          justifyContent="center"
+          alignItems="center"
+          spacing={2}
+        >
           {discoverStats.map((items, index) => {
             return (
-              <Grid item xs={4} key={`stats-${items.label}`}>
+              <Grid2 item size={{ xs: 4 }} key={`stats-${items.label}`}>
                 <Typography variant="h3" align="center" color="primary">
                   {items.value}
                 </Typography>
@@ -59,10 +68,10 @@ const DiscoverSection = () => {
                 >
                   {items.label}
                 </Typography>
-              </Grid>
+              </Grid2>
             );
           })}
-        </Grid>
+        </Grid2>
       </Box>
     </>
   );

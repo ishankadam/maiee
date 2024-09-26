@@ -1,0 +1,17 @@
+.main-container {
+  padding-top: 20px;
+  max-width: 100% !important;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  color: #8a2be2; /* Purple color to match the design */
+  font-family: "Arial", sans-serif;
+  margin-bottom: 0; /* Remove bottom margin to align with the button */
+}

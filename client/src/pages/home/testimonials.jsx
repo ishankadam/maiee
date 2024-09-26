@@ -21,7 +21,7 @@ const Testimonials = () => {
 
       <Grid container justifyContent="center" alignItems="center" spacing={4}>
         {testimonials.map((testimonial, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <Box
               sx={{
                 padding: "20px",

@@ -1,0 +1,60 @@
+.product-card {
+  border: 1px solid #eee;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden; /* Ensures no overflow from card content */
+  transition: 0.3s;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-card .MuiCardMedia-root {
+  height: 300px; /* Ensure image height consistency */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+}
+
+.sold-out,
+.ready-to-ship {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #d9534f; /* Red for sold out */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.875rem; /* Adjust font size for labels */
+}
+
+.ready-to-ship {
+  background-color: #d9534f; /* Green for ready to ship */
+}
+
+.product-card .MuiCardContent-root {
+  text-align: center;
+}
+
+.product-card .MuiCardContent-root .MuiTypography-root {
+  color: #33376f; /* Consistent color for product names */
+}
+
+.MuiPagination-root {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.MuiPagination-ul {
+  display: flex;
+  justify-content: flex-end;
+}
+.no-records {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin-top: 50px !important; /* Space from the top or other content */
+  margin-left: 20% !important;
+  font-size: 1.2rem; /* Larger font size for visibility */
+  color: #d9534f; /* Gray color for the message */
+  font-weight: bold; /* Make the text bold for emphasis */
+}

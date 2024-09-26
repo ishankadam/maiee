@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Typography, IconButton, Link } from "@mui/material";
+import { Container, Grid2, Typography, IconButton, Link } from "@mui/material";
 import { Twitter, Facebook, Instagram, LinkedIn } from "@mui/icons-material";
 
 const Footer = () => {
@@ -8,9 +8,9 @@ const Footer = () => {
       style={{ backgroundColor: "#1c1e26", padding: "40px 0", color: "#fff" }}
     >
       <Container>
-        <Grid container spacing={4}>
+        <Grid2 container spacing={4}>
           {/* Left Side (Company Information) */}
-          <Grid item xs={12} md={4}>
+          <Grid2 item size={{ xs: 12, md: 4 }}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
               MAIEE ENTERPRISE
             </Typography>
@@ -56,10 +56,10 @@ const Footer = () => {
                 <LinkedIn />
               </IconButton>
             </div>
-          </Grid>
+          </Grid2>
 
           {/* Center Section (Links) */}
-          <Grid item xs={12} md={2}>
+          <Grid2 item sx={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Company
             </Typography>
@@ -85,10 +85,10 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </Grid>
+          </Grid2>
 
           {/* Product Section */}
-          <Grid item xs={12} md={2}>
+          <Grid2 item size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Product
             </Typography>
@@ -114,10 +114,10 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </Grid>
+          </Grid2>
 
           {/* Services Section */}
-          <Grid item xs={12} md={2}>
+          <Grid2 item size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Services
             </Typography>
@@ -143,10 +143,10 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </Grid>
+          </Grid2>
 
           {/* Legal Section */}
-          <Grid item xs={12} md={2}>
+          <Grid2 item size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Legal
             </Typography>
@@ -167,8 +167,8 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Container>
     </footer>
   );
