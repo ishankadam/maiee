@@ -44,7 +44,17 @@ const ProductList = (props) => {
 
   return (
     <>
-      <Grid2 container spacing={3}>
+      <Grid2
+        container
+        spacing={2}
+        sx={{
+          background: "#fff",
+          padding: "10px",
+          boxShadow:
+            "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
+          borderRadius: "5px",
+        }}
+      >
         {products && products.length > 0 ? (
           products.map((product) => (
             <Grid2 item size={{ xs: 12, sm: 6, md: 3 }} key={product.productId}>
@@ -52,19 +62,41 @@ const ProductList = (props) => {
                 <CardMedia
                   component="img"
                   height="300"
-                  image={product.image} // Replace with the actual image path
+                  image={product.image}
                   alt={product.name}
+                  sx={{
+                    borderRadius: "3px",
+                    marginBottom: "10px",
+                  }}
                 />
-                {product.soldOut && <div className="sold-out">SOLD OUT</div>}
+                {/* {product.soldOut && <div className="sold-out">SOLD OUT</div>}
                 {product.readyToShip && (
-                  <div className="ready-to-ship">Ready To Ship</div>
-                )}
-                <CardContent>
+                  <div className="ready-to-ship">READY TO SHIP</div>
+                )} */}
+                <CardContent
+                  sx={{
+                    justifyContent: "center",
+                    display: "flex",
+                    padding: "5px !important",
+                    borderRadius: "3px",
+                    background: "#1f2143",
+                    backgroundImage:
+                      "linear-gradient(32deg, rgba(8, 8, 8, 0.74) 30px, transparent)",
+                  }}
+                >
                   <Typography
                     gutterBottom
                     variant="h6"
                     component="div"
-                    sx={{ color: "#33376f" }}
+                    sx={{
+                      color: "#fff !important",
+                      verticalAlign: "center",
+                      padding: "2px !important",
+                      margin: "0 !important",
+                      borderRadius: "10px",
+                      fontWeight: "600",
+                      letterSpacing: "1px",
+                    }}
                   >
                     {product.name}
                   </Typography>

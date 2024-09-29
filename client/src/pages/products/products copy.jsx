@@ -39,14 +39,15 @@ const Products = () => {
       <Container
         maxWidth="lg"
         className="main-container"
-        sx={{ padding: { xs: "20px", sm: "20px", md: "30px", lg: "20px" } }}
+        sx={{ padding: { xs: "20px", sm: "30px", md: "30px", lg: "40px" } }}
       >
         <div className="header-wrapper">
           <Typography
+            // className="page-title"
             variant="h4"
+            gutterBottom
             sx={{
-              color: "#212121",
-              fontFamily: "'Roboto Serif', serif",
+              color: "#33376F",
               fontWeight: "Bold",
               textAlign: { xs: "center", md: "center" },
               fontSize: {
@@ -59,14 +60,14 @@ const Products = () => {
           >
             {_.upperCase(productType.category)}
           </Typography>
-          {/* <Button
+          <Button
             className="orange-btn"
             variant="contained"
             color="warning"
             onClick={handleOpenForm}
           >
             Add Product
-          </Button> */}
+          </Button>
         </div>
         <Grid2 container spacing={3}>
           {/* Sidebar on the left */}

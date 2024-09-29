@@ -41,7 +41,11 @@ const Sidebar = (props) => {
       <List>
         {experticesData.map((category, catIndex) => (
           <div key={catIndex}>
-            <Typography className="category-header">{category.name}</Typography>
+            <section className="category-section">
+              <Typography className="category-header">
+                {category.name}
+              </Typography>
+            </section>
             {category.items.map((item, index) => {
               return (
                 <div key={index}>
@@ -53,9 +57,18 @@ const Sidebar = (props) => {
                       item.name === selectedCategory ? "highlighted" : ""
                     }
                   >
-                    <ListItemText primary={item.name} />
+                    <ListItemText
+                      primary={item.name}
+                      sx={{
+                        fontSize: "22px !important",
+                      }}
+                    />
                     {item.subcategories.length > 0 &&
-                      (open === item.name ? <ExpandLess /> : <ExpandMore />)}
+                      (open === item.name ? (
+                        <ExpandLess sx={{ color: "black" }} />
+                      ) : (
+                        <ExpandMore sx={{ color: "black" }} />
+                      ))}
                   </ListItem>
                   {item.subcategories.length > 0 && (
                     <Collapse
@@ -63,11 +76,18 @@ const Sidebar = (props) => {
                       timeout="auto"
                       unmountOnExit
                     >
-                      <List component="div" disablePadding>
+                      <List
+                        component="div"
+                        disablePadding
+                        sx={{ border: "1px solid #d6d6d6" }}
+                      >
                         {item.subcategories.map((subitem, subIndex) => (
                           <ListItem
                             key={subIndex}
-                            sx={{ pl: 4 }}
+                            sx={{
+                              pl: 4,
+                              background: "#edf2f7",
+                            }}
                             onClick={() =>
                               handleClick(category.name, subitem, "subCategory")
                             }

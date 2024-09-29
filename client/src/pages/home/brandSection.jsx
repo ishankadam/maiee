@@ -7,7 +7,7 @@ const BrandSection = () => {
     <Box
       sx={{
         position: "relative",
-        width: "100vw",
+        // width: "100vw",
         height: "100vh", // Full screen height
         overflow: "hidden", // Ensures the image stays within the viewport
       }}
@@ -42,10 +42,33 @@ const BrandSection = () => {
           borderRadius: "8px",
         }}
       >
-        <Typography variant="h1" gutterBottom sx={{ color: "#E55C35" }}>
+        <Typography
+          className="fade-up"
+          variant="h1"
+          gutterBottom
+          sx={{
+            color: "#E55C35",
+            fontWeight: "Bold",
+            fontSize: { xs: "2.5rem", sm: "3rem", md: "4rem", lg: "6rem" },
+          }}
+        >
           MAIEE ENTERPRISES
         </Typography>
-        <Typography variant="h4" sx={{ color: "#33376F" }}>
+        <Typography
+          className="fade-down"
+          variant="h4"
+          sx={{
+            color: "#33376F",
+            fontFamily: "'Roboto Serif', serif",
+            fontWeight: "Bold",
+            fontSize: {
+              xs: "1.5rem",
+              sm: "1.75rem",
+              md: "2rem",
+              lg: "2.125rem",
+            },
+          }}
+        >
           "THE ART OF YARN"
         </Typography>
       </Box>

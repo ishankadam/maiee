@@ -1,20 +1,25 @@
 import React from "react";
 import { Container, Grid2, Typography, IconButton, Link } from "@mui/material";
 import { Twitter, Facebook, Instagram, LinkedIn } from "@mui/icons-material";
+import "../../css/home.scss";
 
 const Footer = () => {
   return (
     <footer
-      style={{ backgroundColor: "#1c1e26", padding: "40px 0", color: "#fff" }}
+      style={{ backgroundColor: "#161C2D", padding: "30px 0", color: "#fff" }}
     >
       <Container>
         <Grid2 container spacing={4}>
           {/* Left Side (Company Information) */}
           <Grid2 item size={{ xs: 12, md: 4 }}>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
               MAIEE ENTERPRISE
             </Typography>
-            <Typography variant="body2" paragraph>
+            <Typography
+              variant="body1"
+              paragraph
+              sx={{ color: "#E3E4E6", lineHeight: "25px" }}
+            >
               Maiee Enterprise is your trusted partner for premium garment
               accessories, dedicated to enhancing business efficiency,
               regulatory compliance, and customer satisfaction. With a skilled
@@ -24,6 +29,7 @@ const Footer = () => {
             {/* Social Media Icons */}
             <div>
               <IconButton
+                className="footer-icon"
                 color="inherit"
                 component={Link}
                 href="#"
@@ -32,6 +38,7 @@ const Footer = () => {
                 <Twitter />
               </IconButton>
               <IconButton
+                className="footer-icon"
                 color="inherit"
                 component={Link}
                 href="#"
@@ -40,6 +47,7 @@ const Footer = () => {
                 <Facebook />
               </IconButton>
               <IconButton
+                className="footer-icon"
                 color="inherit"
                 component={Link}
                 href="#"
@@ -48,6 +56,7 @@ const Footer = () => {
                 <Instagram />
               </IconButton>
               <IconButton
+                className="footer-icon"
                 color="inherit"
                 component={Link}
                 href="#"
@@ -59,11 +68,11 @@ const Footer = () => {
           </Grid2>
 
           {/* Center Section (Links) */}
-          <Grid2 item sx={{ xs: 12, md: 2 }}>
+          <Grid2 item size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Company
             </Typography>
-            <ul style={{ listStyleType: "none", padding: 0 }}>
+            <ul style={{}}>
               <li>
                 <Link href="#" color="inherit">
                   About us

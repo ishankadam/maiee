@@ -15,6 +15,7 @@ import lace5 from "./assets/lace-5.jpg";
 import lace6 from "./assets/lace-6.jpg";
 import lace7 from "./assets/lace-6.jpg";
 import lace8 from "./assets/lace-6.jpg";
+import { Description } from "@mui/icons-material";
 
 export const categories = [
   { label: "LACES", value: "laces" },
@@ -80,35 +81,47 @@ export const discoverStats = [
 
 export const experticesData = [
   {
-    name: "Category",
+    name: "Categories",
     items: [
       {
-        name: "LACES",
+        name: "Laces",
+        description:
+          "Trims frame elegance, stitching stories in fabric's embrace, while laces weave whispers of timeless grace.",
         imgSrc: laces,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },
       {
-        name: "APPLIQUES",
+        name: "Appliques",
+        description:
+          "Appliqué stitches dreams onto fabric's plain, a tapestry of art, where imagination does reign. Each stitch a tale, in the realm of texture, where fabric becomes a canvas, adorned with crafted adventure.",
         imgSrc: appliques,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },
       {
-        name: "FABRICS",
+        name: "Fabrics",
+        description:
+          "Lace, a delicate whisper in fabric's embrace, weaves elegance with threads of timeless grace. Intricate patterns dance, adding a touch of romance to every garment's chance.",
         imgSrc: fabrics,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },
       {
         name: "Collars",
+        description:
+          "Collar stands tall, a frame for the neckline's calligraphy, stitching elegance into fashion's symphony. In its curve, style finds a subtle embrace, completing attire with a touch of grace.",
         imgSrc: collars,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },
       {
         name: "Necklines",
+        description:
+          "Necklines define the shape of a garment's upper opening around the neck and shoulders. They vary widely, from V-necks that elongate the neck to crew necks that provide a classic, close-fitting look. Different necklines, like scoop and boat necks, create distinct styles and suit various body types and occasions.",
         imgSrc: necklines,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },
       {
-        name: "Pockets",
+        name: "Pockets & More",
+        description:
+          "We are pleased to offer custom design services tailored to your specific requirements for bulk orders. If you provide us with your design, we can bring your vision to life, ensuring that each piece meets your expectations.",
         imgSrc: pockets,
         subcategories: ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
       },

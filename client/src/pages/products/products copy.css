@@ -6,20 +6,17 @@ body {
   background-color: #f1f3f6;
 }
 .header-wrapper {
-  /* background-color: #fff; */
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); */
-  border-radius: 2px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  padding: 12px !important;
+  margin-bottom: 10px;
+  padding: 20px 0;
   /* border-bottom: 1px solid rgb(199, 198, 198); */
 }
 
 .orange-btn {
   font-size: 14px !important;
-  padding: 10px 12px !important;
+  padding: 0.8em 1.2em !important;
   border: transparent !important;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4) !important;
   background: #e55c35 !important;

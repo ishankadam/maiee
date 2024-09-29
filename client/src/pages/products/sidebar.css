@@ -1,14 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 .sidebar {
-  width: 250px;
-  padding: 10px;
+  /* width: 270px; */
+  background: #fff;
+  /* padding: 10px; */
+  border-radius: 5px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  /* box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.06); */
 }
 
 .category-header {
-  font-size: 1.2rem !important;
-  color: #e55c35 !important; /* Custom color */
-  border-bottom: 1px solid #ee8e73;
-  padding: 10px 0;
-  margin-bottom: 10px;
+  font-size: 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px !important;
+  font-weight: 600 !important;
+  font-family: Inter, -apple-system, Helvetica, Arial, sans-serif !important;
+  color: #212121 !important; /* Custom color */
+  /* border-bottom: 1px solid #ee8e73; */
+  /* padding-bottom: 10px 0; */
+  /* margin-bottom: 10px !important; */
+}
+
+.category-section {
+  border-bottom: 1px solid #e7e7e7;
+  padding: 12px;
 }
 
 .MuiListItemText-root {
@@ -31,13 +46,15 @@
 
 .highlighted {
   background-color: rgba(
-    229,
-    92,
-    53,
+    224,
+    81,
+    42,
     0.3
   ) !important; /* Highlight color for selected category */
 }
 
 .highlighted-subcategory {
+  font-weight: bold !important;
+  /* border: 1px solid #d6d6d6; */
   background-color: #ffece5 !important; /* Highlight color for selected subcategory */
 }
