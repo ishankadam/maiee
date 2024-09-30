@@ -1,4 +1,5 @@
 import { Box, Grid2, Typography } from "@mui/material";
+// import React from "react";
 import discoverImage from "../../assets/discover.jpeg";
 import "../../css/home.scss";
 import { discoverStats, discoverText } from "../../common";
@@ -13,31 +14,6 @@ const formattedText = discoverText.split("{{break}}").map((part, index) => (
 ));
 
 const DiscoverSection = () => {
-  const [isInView, setIsInView] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect(); // Stop observing after triggering once
-        }
-      },
-      { threshold: 0.5 } // Adjust this value to trigger the animation earlier or later
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
-      }
-    };
-  }, []);
-
   return (
     <>
       <Box
@@ -112,13 +88,12 @@ const DiscoverSection = () => {
         </Grid2>
       </Box>
 
-      {/* Stats Section with Counter Animation */}
+      {/* stats */}
       <Box
         sx={{
           backgroundColor: "#E1E3FF",
           padding: { xs: "20px", md: "20px 80px" },
         }}
-        ref={ref} // Adding ref to monitor when this section is in view
       >
         <Grid2
           container
@@ -126,7 +101,7 @@ const DiscoverSection = () => {
           alignItems="center"
           spacing={3}
         >
-          {discoverStats.map((items) => {
+          {discoverStats.map((items, index) => {
             return (
               <Grid2
                 className="zoom-in"
@@ -143,17 +118,7 @@ const DiscoverSection = () => {
                     fontSize: { xs: "1.8rem", md: "3rem" }, // Responsive font size
                   }}
                 >
-                  {/* Apply count-up animation when in view */}
-                  {isInView ? (
-                    <CountUp
-                      start={0}
-                      end={items.value}
-                      duration={2.5} // Customize duration as needed
-                      delay={0}
-                    />
-                  ) : (
-                    0
-                  )}
+                  {items.value}
                 </Typography>
                 <Typography
                   variant="h6"
