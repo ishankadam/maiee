@@ -1,68 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Checkbox, Container, FormControlLabel } from "@mui/material";
-import Textfield from "../../components/textfield/textfield";
 import CustomModal from "./customModal";
 import { categories, productType } from "../../common";
 import SelectDropdown from "../dropdown/selectDropdown";
 import "./createProduct.css";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import Soldout from "../../assets/soldout.png";
-import SoldoutFilled from "../../assets/soldoutfilled.png";
+import UploadFiles from "../upload/uploadFiles";
+import { createProduct } from "../../api";
 
 const ProductForm = (props) => {
-  const [project, setproject] = useState({
-    name: "",
-    image: [],
-    productId: 0,
+  const [products, setProducts] = useState([]); // Array to store products for each image
+  const [currentProduct, setCurrentProduct] = useState({
     category: "",
-    type: "",
-    readyToShip: true,
-    soldOut: true,
+    subcategory: "",
+    image: null, // To store the current uploaded image
   });
 
+  const [images, setImages] = useState([]);
+
   const handleChange = (value, field) => {
-    setproject((prevDetails) => ({
+    setCurrentProduct((prevDetails) => ({
       ...prevDetails,
       [field]: value,
-      ...(field === "productId" && { name: value }),
     }));
   };
 
-  const handleCheckboxChange = (event, field) => {
-    setproject((prevDetails) => ({
-      ...prevDetails,
-      [field]: event.target.checked,
-    }));
+  const handleFileUpload = (files) => {
+    setImages(files);
   };
+
+  useEffect(() => {
+    if (images.length > 0) {
+      const newProducts = images.map((file) => ({
+        name: file.name, // Use image name as productId
+        category: currentProduct.category,
+        subcategory: currentProduct.subcategory,
+        image: file,
+      }));
+      setProducts(newProducts); // Set new products for each image
+    }
+  }, [images, currentProduct.category, currentProduct.subcategory]);
 
   const handleNewProduct = (e) => {
     e.preventDefault();
-    handleClose();
-  };
-
-  const handleEditProduct = (e) => {
-    e.preventDefault();
-    handleClose();
+    // Add validation here
+    if (
+      !currentProduct.category ||
+      !currentProduct.subcategory ||
+      products.length === 0
+    ) {
+      alert("Please fill all required fields and upload images.");
+      return;
+    } else {
+      props.setLoading(true);
+      createProduct({ products, setLoading: props.setLoading });
+    }
+    console.log("Submitted products:", products);
+    props.handleModalClose();
   };
 
   const handleClose = () => {
     props.handleModalClose();
   };
 
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
   return (
     <CustomModal
-      className="job-form-modal"
+      className="product-form-modal"
       open={props.open}
       title={{
         label: props.isEdit ? "Edit Product" : "Create Product",
         variant: "h2",
-        id: "apply-job-modal-title",
+        id: "apply-product-modal-title",
       }}
       primaryButton={{
         isRequired: true,
         label: props.isEdit ? "Save" : "Add",
-        handler: props.isEdit ? handleEditProduct : handleNewProduct,
+        handler: handleNewProduct,
       }}
       secondaryButton={{
         isRequired: true,
@@ -70,74 +85,39 @@ const ProductForm = (props) => {
         handler: handleClose,
       }}
     >
-      <Container className="createjob-container">
-        <Box className="createjob-box">
-          <Textfield
-            label="Product Id"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            name="productId"
-            value={project.productId}
-            config={{ field: "productId" }}
-            handleEdit={handleChange}
-          />
-          <SelectDropdown
-            label="Category"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            select
-            name="category"
-            value={project.category}
-            config={{ field: "category" }}
-            handleEdit={handleChange}
-            optionList={categories}
-          />
-          <SelectDropdown
-            label="Type"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            select
-            name="type"
-            value={project.type}
-            config={{ field: "type" }}
-            handleEdit={handleChange}
-            optionList={productType}
-          />
-
-          {/* Place checkboxes inline using flexbox */}
-          <Box className="checkbox-container">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<LocalShippingOutlinedIcon />}
-                  checkedIcon={<LocalShippingIcon />}
-                  checked={project.readyToShip}
-                  onChange={(e) => handleCheckboxChange(e, "readyToShip")}
-                />
-              }
-              label="Ready to Ship"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<img src={Soldout} alt="Soldout" />}
-                  checkedIcon={<img src={SoldoutFilled} alt="Soldout Filled" />}
-                  checked={project.soldOut}
-                  onChange={(e) => handleCheckboxChange(e, "soldOut")}
-                />
-              }
-              label="Sold Out"
-              className="checkbox-image"
-            />
-          </Box>
-        </Box>
-      </Container>
+      <SelectDropdown
+        label="Category"
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        required
+        select
+        name="category"
+        value={currentProduct.category}
+        config={{ field: "category" }}
+        handleEdit={handleChange}
+        optionList={categories}
+      />
+      <SelectDropdown
+        label="Type"
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        required
+        select
+        name="type"
+        value={currentProduct.subcategory}
+        config={{ field: "subcategory" }}
+        handleEdit={handleChange}
+        optionList={productType}
+      />
+      <UploadFiles
+        updateData={(files) => handleFileUpload(files)}
+        isEdit={true}
+        file={currentProduct.image}
+        acceptedFiles="image/png, image/jpeg"
+        parentClass="product-form-container"
+      />
     </CustomModal>
   );
 };

@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
-import { Button, Container, Grid2, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Grid2,
+  Typography,
+} from "@mui/material";
 import ProductList from "./productList";
 import "./products.css";
 import _ from "lodash";
 import ProductForm from "../../components/modal/createProduct";
+import { getAllProducts } from "../../api";
+import Footer from "../home/footer";
+import ViewProduct from "./viewProduct";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Products = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
+  const item = state?.item || "laces";
+
+  const [allProduct, setAllProduct] = useState([]);
   const [productType, setProductType] = useState({
-    category: "laces",
+    category: item,
     subCategory: "all",
   });
   const [showModal, setShowModal] = useState({
@@ -17,7 +33,38 @@ const Products = () => {
     data: {},
   });
 
-  const handleModalSubmit = () => {};
+  const [showProduct, setShowProduct] = useState({
+    show: false,
+    index: 0,
+    data: [],
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (state) {
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location, navigate, state]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        await getAllProducts(setAllProduct);
+      } catch (err) {
+        setError("Failed to fetch products.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleModalSubmit = () => {
+    // Implement product submission logic
+  };
 
   const handleModalClose = () => {
     setShowModal({
@@ -26,10 +73,17 @@ const Products = () => {
     });
   };
 
+  const handleViewModalClose = () => {
+    setShowProduct({
+      show: false,
+      data: {},
+    });
+  };
+
   const handleOpenForm = () => {
     setShowModal({
       show: true,
-      edit: false,
+      isEdit: false,
       data: {},
     });
   };
@@ -59,27 +113,48 @@ const Products = () => {
           >
             {_.upperCase(productType.category)}
           </Typography>
-          {/* <Button
+          <Button
             className="orange-btn"
             variant="contained"
             color="warning"
             onClick={handleOpenForm}
           >
             Add Product
-          </Button> */}
+          </Button>
         </div>
-        <Grid2 container spacing={3}>
-          {/* Sidebar on the left */}
-          <Grid2 item size={{ xs: 6, sm: 4, md: 2.5 }}>
-            <Sidebar setProductType={setProductType} />
-          </Grid2>
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <Grid2 container spacing={3}>
+            {/* Sidebar on the left */}
+            <Grid2 size={{ xs: 6, sm: 4, md: 2.5 }}>
+              <Sidebar
+                productType={productType}
+                setProductType={setProductType}
+              />
+            </Grid2>
 
-          {/* ProductList on the right */}
-          <Grid2 item size={{ xs: 12, sm: 8, md: 9.5 }}>
-            <ProductList productType={productType} />
+            {/* ProductList on the right */}
+            <Grid2 size={{ xs: 12, sm: 8, md: 9.5 }}>
+              <ProductList
+                productType={productType}
+                setShowProduct={setShowProduct}
+              />
+            </Grid2>
           </Grid2>
-        </Grid2>
+        )}
       </Container>
+      <Footer />
+      {showProduct.show && (
+        <ViewProduct
+          open={showProduct.show}
+          index={showProduct.index}
+          data={showProduct.data}
+          handleViewModalClose={handleViewModalClose}
+        />
+      )}
       <ProductForm
         open={showModal.show}
         isEdit={showModal.isEdit}
@@ -87,7 +162,8 @@ const Products = () => {
         handleModalSubmit={handleModalSubmit}
         handleModalClose={handleModalClose}
         setShowModal={setShowModal}
-      ></ProductForm>
+        setLoading={setLoading}
+      />
     </>
   );
 };

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Grid2,
@@ -20,6 +19,7 @@ const ProductList = (props) => {
     const productsPerPage = page === 1 ? 12 : 10; // 12 products on the first page, 10 on the rest
     const startIdx = page === 1 ? 0 : 12 + (page - 2) * 10;
     const endIdx = startIdx + productsPerPage;
+
     const filteredList = allProducts.filter((item) => {
       // If selected subCategory is "all", only filter by category
       if (props.productType.subCategory === "all") {
@@ -31,15 +31,22 @@ const ProductList = (props) => {
         );
       }
     });
+
     const productList = filteredList.slice(startIdx, endIdx);
     setProducts(productList);
   }, [allProducts, page, props.productType]);
 
-  useEffect(() => {}, [props.productType, allProducts]);
-
   // Handle page change
   const handlePageChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleViewProduct = (index) => {
+    props.setShowProduct({
+      show: true,
+      index: index,
+      data: products,
+    });
   };
 
   return (
@@ -56,9 +63,12 @@ const ProductList = (props) => {
         }}
       >
         {products && products.length > 0 ? (
-          products.map((product) => (
-            <Grid2 item size={{ xs: 12, sm: 6, md: 3 }} key={product.productId}>
-              <Card className="product-card">
+          products.map((product, index) => (
+            <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={product.productId}>
+              <Card
+                className="product-card"
+                onClick={() => handleViewProduct(index)}
+              >
                 <CardMedia
                   component="img"
                   height="300"
@@ -69,10 +79,6 @@ const ProductList = (props) => {
                     marginBottom: "10px",
                   }}
                 />
-                {/* {product.soldOut && <div className="sold-out">SOLD OUT</div>}
-                {product.readyToShip && (
-                  <div className="ready-to-ship">READY TO SHIP</div>
-                )} */}
                 <CardContent
                   sx={{
                     justifyContent: "center",

@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-// import "./modal.css";
+import "./modal.css";
 
 function CustomModal(props) {
   const [open, setOpen] = useState(false);
@@ -44,6 +44,7 @@ function CustomModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       id="modal-surface"
+      className="product-form-container"
     >
       <Box className={`common-modal ${props.className ? props.className : ""}`}>
         <div className="header-wrapper">
@@ -83,6 +84,7 @@ function CustomModal(props) {
           flexWrap="wrap"
           paddingTop={!props.isConfirmation ? "1.625rem" : "0"}
           borderTop={!props.isConfirmation ? "2px solid #ccc" : "none"}
+          className="botton-container"
         >
           {props.contentOnSideOfButton?.isRequired ? (
             <Stack

@@ -45,7 +45,7 @@ const Testimonials = () => {
 
       <Grid2 container justifyContent="center" alignItems="center" spacing={4}>
         {testimonials.map((testimonial, index) => (
-          <Grid2 item size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <Box
               className="testimonial-card"
               sx={{

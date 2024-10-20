@@ -25,7 +25,7 @@ const DiscoverSection = () => {
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
           {/* Image Section */}
-          <Grid2 item size={{ xs: 12, md: 4 }}>
+          <Grid2 size={{ xs: 12, md: 4 }}>
             <Box
               className="zoom-in"
               component="img"
@@ -44,7 +44,6 @@ const DiscoverSection = () => {
 
           {/* Text Section */}
           <Grid2
-            item
             size={{ xs: 12, md: 6 }}
             sx={{ marginLeft: { xs: 0, md: "60px" } }}
           >
@@ -101,7 +100,6 @@ const DiscoverSection = () => {
             return (
               <Grid2
                 className="zoom-in"
-                item
                 size={{ xs: 12, md: 4, sm: 4 }}
                 key={`stats-${items.label}`}
               >

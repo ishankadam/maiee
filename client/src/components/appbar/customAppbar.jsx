@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import logo from "../../assets/MAIEE_LOGO_without inner shadow (1).png";
-import { adminSettings } from "../../common";
 import { useNavigate } from "react-router-dom";
+import { adminSettings } from "../../common";
 const CustomAppbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isAdmin] = useState(false);
@@ -48,10 +48,7 @@ const CustomAppbar = () => {
             width: "100%",
           }}
         >
-          <div
-            className="logo-wrapper"
-            onClick={() => handlePageChange("home")}
-          >
+          <div className="logo-wrapper" onClick={() => handlePageChange("")}>
             <IconButton edge="start" color="inherit" aria-label="logo">
               <img
                 src={logo}

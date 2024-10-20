@@ -1,10 +1,15 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import React from "react";
-import { experticesData, experticesDescription } from "../../common";
+import { experticesData } from "../../common";
+import { useNavigate } from "react-router-dom";
 
-import "../../css/home.scss";
+const ExperticeSection = () => {
+  const navigate = useNavigate();
 
-function ExperticeSection() {
+  const handlePageChange = (item) => {
+    navigate("/product", { state: { item } }); // Pass item state if needed
+  };
+
   return (
     <Box
       sx={{
@@ -33,7 +38,7 @@ function ExperticeSection() {
       </Typography>
       <Grid2 container spacing={4} justifyContent="center">
         {experticesData[0].items.map((item, index) => (
-          <Grid2 item size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <Box
               className="card"
               sx={{
@@ -43,30 +48,37 @@ function ExperticeSection() {
                 boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                 background: "#33376F",
                 position: "relative",
+                cursor: "pointer",
               }}
+              onClick={() => handlePageChange(item.name)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) =>
+                e.key === "Enter" && handlePageChange(item.name)
+              } // Allow keyboard navigation
             >
               <img
                 src={item.imgSrc}
-                alt={item.label}
+                alt={item.label || item.name} // Use meaningful alt text
                 style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                onError={(e) => {
+                  e.target.onerror = null; // Prevent infinite loop
+                  e.target.src = "default-image.jpg"; // Fallback image
+                }}
               />
-              {/* cardbody */}
               <Box
                 className="card-body"
                 sx={{
                   width: "100%",
                   height: "0",
-
                   left: "0",
                   right: "0",
                   top: "0",
                   position: "absolute",
-                  // background: "#1f3d4738",
                   background: "rgba(22,28,45,0.5)",
                   backdropFilter: "blur(5px)",
                   transition: ".5s ease",
                   overflow: "hidden",
-                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -109,6 +121,6 @@ function ExperticeSection() {
       </Grid2>
     </Box>
   );
-}
+};
 
 export default ExperticeSection;
