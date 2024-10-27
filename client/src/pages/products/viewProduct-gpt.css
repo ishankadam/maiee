@@ -1,0 +1,30 @@
+.view-product-modal {
+  max-width: 800px; /* Set a max width for the modal */
+  box-shadow: none !important;
+  margin: 20px auto;
+  background-color: rgba(0, 0, 0, 0); /* Transparent dark background */
+  border: none !important;
+  overflow: hidden;
+  border-radius: none !important;
+  height: 85vh;
+}
+
+.view-product-modal .MuiIconButton-root {
+  font-size: 4px; /* Adjust the icon size */
+}
+
+.view-product-modal img {
+  border-radius: 8px; /* Add rounded corners to the image */
+}
+
+.view-product-modal h5 {
+  font-size: 24px;
+  font-weight: bold; /* Make the product name bold */
+  text-align: center; /* Center the product name */
+  margin-top: 10px; /* Add margin to the top */
+}
+
+/* Adjust button styles (if needed) */
+.view-product-modal .MuiButton-root {
+  margin-top: 15px; /* Add margin to buttons */
+}

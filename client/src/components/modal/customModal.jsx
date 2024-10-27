@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-// import "./modal.css";
+import "./modal.css";
 
 function CustomModal(props) {
   const [open, setOpen] = useState(false);
@@ -44,20 +44,22 @@ function CustomModal(props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       id="modal-surface"
+      className="product-form-container"
     >
       <Box className={`common-modal ${props.className ? props.className : ""}`}>
         <div className="header-wrapper">
-          <div className="header-text">
-            <Typography
-              variant="h3"
-              className="modal-title"
-              id={props.title.id}
-              sx={props.title.sx}
-            >
-              {props.title.label}
-            </Typography>
-            {props.datePicker?.isRequired ? props.datePicker.content : null}
-          </div>
+          {props.title ? (
+            <div className="header-text">
+              <Typography
+                variant="h4"
+                className="modal-title"
+                id={props.title.id}
+                sx={props.title.sx}
+              >
+                {props.title.label}
+              </Typography>
+            </div>
+          ) : null}
           <CloseIcon
             className="modal-close-icon"
             onClick={handleClose}
@@ -83,6 +85,7 @@ function CustomModal(props) {
           flexWrap="wrap"
           paddingTop={!props.isConfirmation ? "1.625rem" : "0"}
           borderTop={!props.isConfirmation ? "2px solid #ccc" : "none"}
+          className="botton-container"
         >
           {props.contentOnSideOfButton?.isRequired ? (
             <Stack

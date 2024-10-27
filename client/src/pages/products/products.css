@@ -5,15 +5,15 @@ body {
   /* background-color: #edf2f7; */
   background-color: #f1f3f6;
 }
-.header-wrapper {
+.p-header-wrapper {
   /* background-color: #fff; */
   /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); */
-  border-radius: 2px;
+  /* border-radius: 2px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
-  padding: 12px !important;
+  padding: 12px 0 !important; */
   /* border-bottom: 1px solid rgb(199, 198, 198); */
 }
 
@@ -33,4 +33,37 @@ body {
 
 .orange-btn:active {
   transform: translate(0em, 0.2em) !important;
+}
+
+.filter-button {
+  /* display: none ; */
+  position: absolute;
+  right: 0;
+}
+
+/* For tablets and larger devices */
+@media (min-width: 600px) {
+  .filter-section {
+    display: none;
+  }
+  .filter-button {
+    display: none !important;
+  }
+}
+
+/* For laptops and desktops */
+@media (min-width: 1024px) {
+  .filter-button {
+    display: none !important;
+  }
+  .filter-section {
+    display: block;
+  }
+}
+
+/* For smaller mobile devices */
+@media (max-width: 599px) {
+  .filter-section {
+    display: none;
+  }
 }

@@ -294,3 +294,20 @@ export const allProducts = [
     type: "velvet",
   },
 ];
+
+export const getUrl = () => {
+  const url = new URL(window.location.origin);
+  url.port = 5000;
+  return url;
+};
+
+export const handleMiddleTruncation = (value) => {
+  if (value && value.length > 50) {
+    const string1 = value.substr(0, 23);
+    const string2 = value.substr(value.length - 23, value.length);
+    const truncatedValue = string1 + "..." + string2;
+    return truncatedValue;
+  } else {
+    return value;
+  }
+};

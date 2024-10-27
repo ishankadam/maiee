@@ -3,21 +3,30 @@ import {
   Avatar,
   Box,
   Button,
+  Drawer,
   IconButton,
   Menu,
   MenuItem,
   Toolbar,
   Tooltip,
   Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import logo from "../../assets/MAIEE_LOGO_without inner shadow (1).png";
-import { adminSettings } from "../../common";
 import { useNavigate } from "react-router-dom";
+import { adminSettings } from "../../common";
+
 const CustomAppbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isAdmin] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -29,6 +38,17 @@ const CustomAppbar = () => {
   const handlePageChange = (pageName) => {
     navigate(`/${pageName}`);
   };
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
   return (
     <AppBar
       position="static"
@@ -39,28 +59,37 @@ const CustomAppbar = () => {
       }}
     >
       <Toolbar>
-        <div
-          className="toolbar-container"
-          style={{
+        <Box
+          sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
           }}
         >
-          <div
-            className="logo-wrapper"
-            onClick={() => handlePageChange("home")}
+          {/* Logo */}
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="logo"
+            onClick={() => handlePageChange("")}
           >
-            <IconButton edge="start" color="inherit" aria-label="logo">
-              <img
-                src={logo}
-                alt="logo"
-                style={{ height: "40px", marginRight: "10px" }}
-              />
+            <img
+              src={logo}
+              alt="logo"
+              style={{ height: "40px", marginRight: "10px" }}
+            />
+          </IconButton>
+
+          {/* Hamburger Menu Icon (visible on small screens) */}
+          <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+            <IconButton color="inherit" onClick={toggleDrawer(true)}>
+              <MenuIcon />
             </IconButton>
-          </div>
-          <div className="page-wrapper">
+          </Box>
+
+          {/* Desktop Navigation (hidden on small screens) */}
+          <Box sx={{ display: { xs: "none", sm: "flex", md: "flex" } }}>
             <Button
               color="inherit"
               onClick={() => handlePageChange("product")}
@@ -100,43 +129,70 @@ const CustomAppbar = () => {
             >
               Contact Us
             </Button>
-
-            {/* Settings option visible only for admins */}
+            {/* Admin Settings Icon (only visible to admins) */}
             {isAdmin && (
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Maeii" src="/static/images/avatar/2.jpg" />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {adminSettings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography sx={{ textAlign: "center" }}>
-                        {setting}
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Maeii" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
             )}
-          </div>
-        </div>
+          </Box>
+
+          {/* User Menu (Admin only) */}
+          {isAdmin && (
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {adminSettings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: "center" }}>
+                    {setting}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          )}
+        </Box>
+
+        {/* Drawer for Mobile Navigation */}
+        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+          <List sx={{ width: 200 }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handlePageChange("home")}>
+                <ListItemText primary="Home" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handlePageChange("product")}>
+                <ListItemText primary="Product" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handlePageChange("aboutus")}>
+                <ListItemText primary="About Us" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handlePageChange("contactus")}>
+                <ListItemText primary="Contact Us" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Drawer>
       </Toolbar>
     </AppBar>
   );

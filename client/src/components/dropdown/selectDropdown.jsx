@@ -41,20 +41,6 @@ const SelectDropdown = (props) => {
         sx={{ ...props.sx }}
         value={props.value}
         onChange={handleChange}
-        endAdornment={
-          props.value && (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={() => props.handleClear(props.config.field)}
-                edge="end"
-                size="small"
-                aria-label="clear"
-              >
-                <ClearIcon />
-              </IconButton>
-            </InputAdornment>
-          )
-        }
       >
         {menuItems}
       </Select>

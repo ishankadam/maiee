@@ -1,49 +1,64 @@
-import React, { useState } from "react";
-import { Box, Checkbox, Container, FormControlLabel } from "@mui/material";
-import Textfield from "../../components/textfield/textfield";
-import CustomModal from "./customModal";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Modal,
+  Typography,
+  IconButton,
+  Stack,
+} from "@mui/material";
+import { Close as CloseIcon } from "@mui/icons-material";
 import { categories, productType } from "../../common";
 import SelectDropdown from "../dropdown/selectDropdown";
-import "./createProduct.css";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import Soldout from "../../assets/soldout.png";
-import SoldoutFilled from "../../assets/soldoutfilled.png";
+import UploadFiles from "../upload/uploadFiles";
+import { createProduct } from "../../api";
 
 const ProductForm = (props) => {
-  const [project, setproject] = useState({
-    name: "",
-    image: [],
-    productId: 0,
+  const [products, setProducts] = useState([]);
+  const [currentProduct, setCurrentProduct] = useState({
     category: "",
-    type: "",
-    readyToShip: true,
-    soldOut: true,
+    subcategory: "",
+    image: null,
   });
+  const [images, setImages] = useState([]);
 
   const handleChange = (value, field) => {
-    setproject((prevDetails) => ({
+    setCurrentProduct((prevDetails) => ({
       ...prevDetails,
       [field]: value,
-      ...(field === "productId" && { name: value }),
     }));
   };
 
-  const handleCheckboxChange = (event, field) => {
-    setproject((prevDetails) => ({
-      ...prevDetails,
-      [field]: event.target.checked,
-    }));
+  const handleFileUpload = (files) => {
+    setImages(files);
   };
+
+  useEffect(() => {
+    if (images.length > 0) {
+      const newProducts = images.map((file) => ({
+        name: file.name,
+        category: currentProduct.category,
+        subcategory: currentProduct.subcategory,
+        image: file,
+      }));
+      setProducts(newProducts);
+    }
+  }, [images, currentProduct.category, currentProduct.subcategory]);
 
   const handleNewProduct = (e) => {
     e.preventDefault();
-    handleClose();
-  };
-
-  const handleEditProduct = (e) => {
-    e.preventDefault();
-    handleClose();
+    if (
+      !currentProduct.category ||
+      !currentProduct.subcategory ||
+      products.length === 0
+    ) {
+      alert("Please fill all required fields and upload images.");
+      return;
+    } else {
+      props.setLoading(true);
+      createProduct({ products, setLoading: props.setLoading });
+    }
+    props.handleModalClose();
   };
 
   const handleClose = () => {
@@ -51,38 +66,52 @@ const ProductForm = (props) => {
   };
 
   return (
-    <CustomModal
-      className="job-form-modal"
-      open={props.open}
-      title={{
-        label: props.isEdit ? "Edit Product" : "Create Product",
-        variant: "h2",
-        id: "apply-job-modal-title",
-      }}
-      primaryButton={{
-        isRequired: true,
-        label: props.isEdit ? "Save" : "Add",
-        handler: props.isEdit ? handleEditProduct : handleNewProduct,
-      }}
-      secondaryButton={{
-        isRequired: true,
-        label: "Cancel",
-        handler: handleClose,
-      }}
-    >
-      <Container className="createjob-container">
-        <Box className="createjob-box">
-          <Textfield
-            label="Product Id"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            name="productId"
-            value={project.productId}
-            config={{ field: "productId" }}
-            handleEdit={handleChange}
-          />
+    <Modal open={props.open} onClose={handleClose}>
+      <Box
+        sx={{
+          width: 600,
+          maxWidth: "80vw",
+          maxHeight: "90vh",
+          bgcolor: "background.paper",
+          p: 3,
+          borderRadius: 2,
+          boxShadow: 24,
+          overflowY: "auto",
+          mx: "auto",
+          mt: "10vh",
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: "'Roboto Serif', serif",
+              color: "#33376F",
+              fontWeight: "Bold",
+              textAlign: { xs: "center", md: "left" },
+              fontSize: {
+                xs: "1rem",
+                sm: "1.2rem",
+                md: "1.4rem",
+                lg: "1.6rem",
+              },
+            }}
+          >
+            {props.isEdit ? "Edit Product" : "Create Product"}
+          </Typography>
+          <IconButton onClick={handleClose}>
+            <CloseIcon />
+          </IconButton>
+        </Stack>
+
+        <Box mt={2} mb={2}>
           <SelectDropdown
             label="Category"
             variant="outlined"
@@ -91,11 +120,13 @@ const ProductForm = (props) => {
             required
             select
             name="category"
-            value={project.category}
+            value={currentProduct.category}
             config={{ field: "category" }}
             handleEdit={handleChange}
             optionList={categories}
           />
+        </Box>
+        <Box mb={2}>
           <SelectDropdown
             label="Type"
             variant="outlined"
@@ -104,41 +135,37 @@ const ProductForm = (props) => {
             required
             select
             name="type"
-            value={project.type}
-            config={{ field: "type" }}
+            value={currentProduct.subcategory}
+            config={{ field: "subcategory" }}
             handleEdit={handleChange}
             optionList={productType}
           />
-
-          {/* Place checkboxes inline using flexbox */}
-          <Box className="checkbox-container">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<LocalShippingOutlinedIcon />}
-                  checkedIcon={<LocalShippingIcon />}
-                  checked={project.readyToShip}
-                  onChange={(e) => handleCheckboxChange(e, "readyToShip")}
-                />
-              }
-              label="Ready to Ship"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  icon={<img src={Soldout} alt="Soldout" />}
-                  checkedIcon={<img src={SoldoutFilled} alt="Soldout Filled" />}
-                  checked={project.soldOut}
-                  onChange={(e) => handleCheckboxChange(e, "soldOut")}
-                />
-              }
-              label="Sold Out"
-              className="checkbox-image"
-            />
-          </Box>
         </Box>
-      </Container>
-    </CustomModal>
+
+        <Box mb={2}>
+          <UploadFiles
+            updateData={(files) => handleFileUpload(files)}
+            isEdit={true}
+            file={currentProduct.image}
+            acceptedFiles="image/png, image/jpeg"
+            parentClass="product-form-container"
+          />
+        </Box>
+
+        <Box display="flex" justifyContent="space-between" mt="auto">
+          <Button variant="outlined" color="error" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleNewProduct}
+          >
+            {props.isEdit ? "Save" : "Add"}
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 

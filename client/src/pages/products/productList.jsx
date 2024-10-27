@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Grid2,
@@ -11,6 +10,7 @@ import {
 import "./productList.css";
 import { allProducts } from "../../common";
 import _ from "lodash";
+import { Padding } from "@mui/icons-material";
 
 const ProductList = (props) => {
   const [page, setPage] = useState(1);
@@ -20,6 +20,7 @@ const ProductList = (props) => {
     const productsPerPage = page === 1 ? 12 : 10; // 12 products on the first page, 10 on the rest
     const startIdx = page === 1 ? 0 : 12 + (page - 2) * 10;
     const endIdx = startIdx + productsPerPage;
+
     const filteredList = allProducts.filter((item) => {
       // If selected subCategory is "all", only filter by category
       if (props.productType.subCategory === "all") {
@@ -31,15 +32,22 @@ const ProductList = (props) => {
         );
       }
     });
+
     const productList = filteredList.slice(startIdx, endIdx);
     setProducts(productList);
   }, [allProducts, page, props.productType]);
 
-  useEffect(() => {}, [props.productType, allProducts]);
-
   // Handle page change
   const handlePageChange = (event, value) => {
     setPage(value);
+  };
+
+  const handleViewProduct = (index) => {
+    props.setShowProduct({
+      show: true,
+      index: index,
+      data: products,
+    });
   };
 
   return (
@@ -49,30 +57,41 @@ const ProductList = (props) => {
         spacing={2}
         sx={{
           background: "#fff",
-          padding: "10px",
+          padding: {
+            xs: "8px",
+            sm: "8px",
+            md: "10px",
+          },
           boxShadow:
             "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
           borderRadius: "5px",
         }}
       >
         {products && products.length > 0 ? (
-          products.map((product) => (
-            <Grid2 item size={{ xs: 12, sm: 6, md: 3 }} key={product.productId}>
-              <Card className="product-card">
+          products.map((product, index) => (
+            <Grid2 size={{ xs: 6, sm: 6, md: 3 }} key={product.productId}>
+              <Card
+                className="product-card"
+                onClick={() => handleViewProduct(index)}
+              >
                 <CardMedia
                   component="img"
-                  height="300"
                   image={product.image}
                   alt={product.name}
                   sx={{
+                    height: {
+                      xs: "200px !important",
+                      sm: "300px !important",
+                      md: "300px !important",
+                    },
                     borderRadius: "3px",
-                    marginBottom: "10px",
+                    marginBottom: {
+                      xs: "5px",
+                      sm: "8px",
+                      md: "10px",
+                    },
                   }}
                 />
-                {/* {product.soldOut && <div className="sold-out">SOLD OUT</div>}
-                {product.readyToShip && (
-                  <div className="ready-to-ship">READY TO SHIP</div>
-                )} */}
                 <CardContent
                   sx={{
                     justifyContent: "center",
@@ -96,6 +115,11 @@ const ProductList = (props) => {
                       borderRadius: "10px",
                       fontWeight: "600",
                       letterSpacing: "1px",
+                      fontSize: {
+                        xs: "17px",
+                        sm: "18px",
+                        md: "20px",
+                      },
                     }}
                   >
                     {product.name}
@@ -105,13 +129,16 @@ const ProductList = (props) => {
             </Grid2>
           ))
         ) : (
-          <Typography className="no-records" variant="h3">
+          <Typography className="no-records" variant="h5">
             No records found...
           </Typography>
         )}
       </Grid2>
 
       <Pagination
+        color="primary"
+        variant="outlined"
+        shape="rounded"
         count={Math.ceil((allProducts.length - 12) / 10) + 1}
         page={page}
         onChange={handlePageChange}

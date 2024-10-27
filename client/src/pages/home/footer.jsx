@@ -11,7 +11,7 @@ const Footer = () => {
       <Container>
         <Grid2 container spacing={4}>
           {/* Left Side (Company Information) */}
-          <Grid2 item size={{ xs: 12, md: 4 }}>
+          <Grid2 size={{ xs: 12, md: 4 }}>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
               MAIEE ENTERPRISE
             </Typography>
@@ -68,7 +68,7 @@ const Footer = () => {
           </Grid2>
 
           {/* Center Section (Links) */}
-          <Grid2 item size={{ xs: 12, md: 2 }}>
+          <Grid2 size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Company
             </Typography>
@@ -97,7 +97,7 @@ const Footer = () => {
           </Grid2>
 
           {/* Product Section */}
-          <Grid2 item size={{ xs: 12, md: 2 }}>
+          <Grid2 size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Product
             </Typography>
@@ -126,7 +126,7 @@ const Footer = () => {
           </Grid2>
 
           {/* Services Section */}
-          <Grid2 item size={{ xs: 12, md: 2 }}>
+          <Grid2 size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Services
             </Typography>
@@ -155,7 +155,7 @@ const Footer = () => {
           </Grid2>
 
           {/* Legal Section */}
-          <Grid2 item size={{ xs: 12, md: 2 }}>
+          <Grid2 size={{ xs: 12, md: 2 }}>
             <Typography variant="h6" gutterBottom>
               Legal
             </Typography>
