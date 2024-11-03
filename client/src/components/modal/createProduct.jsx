@@ -66,19 +66,26 @@ const ProductForm = (props) => {
   };
 
   return (
-    <Modal open={props.open} onClose={handleClose}>
+    <Modal
+      open={props.open}
+      onClose={handleClose}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Box
         sx={{
-          width: 600,
-          maxWidth: "80vw",
-          maxHeight: "90vh",
+          width: { xs: "250px", sm: "550px", md: "650px", lg: "700px" },
+          maxWidth: "90vw",
+          maxHeight: "80vh",
           bgcolor: "background.paper",
           p: 3,
           borderRadius: 2,
           boxShadow: 24,
-          overflowY: "auto",
           mx: "auto",
-          mt: "10vh",
+          my: "auto",
           position: "relative",
           display: "flex",
           flexDirection: "column",
@@ -125,8 +132,8 @@ const ProductForm = (props) => {
             handleEdit={handleChange}
             optionList={categories}
           />
-        </Box>
-        <Box mb={2}>
+          {/* </Box>
+        <Box mb={2}> */}
           <SelectDropdown
             label="Type"
             variant="outlined"
@@ -142,8 +149,18 @@ const ProductForm = (props) => {
           />
         </Box>
 
-        <Box mb={2}>
+        <Box
+          mb={3}
+          sx={{
+            overflowY: "auto",
+            borderRadius: "5px",
+            padding: "10px 5px",
+          }}
+        >
           <UploadFiles
+            sx={{
+              height: "200px",
+            }}
             updateData={(files) => handleFileUpload(files)}
             isEdit={true}
             file={currentProduct.image}
@@ -152,7 +169,7 @@ const ProductForm = (props) => {
           />
         </Box>
 
-        <Box display="flex" justifyContent="space-between" mt="auto">
+        <Box display="flex" justifyContent="space-between">
           <Button variant="outlined" color="error" onClick={handleClose}>
             Cancel
           </Button>

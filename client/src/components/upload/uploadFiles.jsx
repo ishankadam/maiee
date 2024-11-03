@@ -1,5 +1,5 @@
 import { Close } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Grid2 } from "@mui/material";
 import React, { useEffect, useState, forwardRef } from "react";
 import "./uploadFiles.css";
 
@@ -127,32 +127,69 @@ const UploadFiles = forwardRef((props, ref) => {
           </label>
         </form>
       )}
-      {files.length > 0 && (
-        <>
-          {files.map((file, index) => (
-            <div key={index} className="attachment-filename">
-              <Typography>
-                {file && file?.name ? file.name : "Unnamed File"}
-              </Typography>
-              <Close onClick={() => handleFileRemove(index)} />
-              <div className="image-container">
-                {file.type.startsWith("image") && imageUrls[index] && (
-                  <img
-                    className="attachment-file"
-                    src={imageUrls[index]}
-                    alt="attachment"
-                  />
-                )}
-                <div className="overlay">
-                  <Button color="primary" variant="contained" size="small">
-                    Download
-                  </Button>
+      <Grid2
+        container
+        spacing={2}
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
+        {files.length > 0 && (
+          <>
+            {files.map((file, index) => (
+              <Grid2
+                item
+                xs={6}
+                md={4}
+                key={index}
+                className="attachment-filename"
+                sx={{
+                  border: "1px solid #ccc",
+                  padding: "5px !important",
+                  position: "relative",
+                  width: "200px",
+                }}
+              >
+                <div className="image-container">
+                  {file.type.startsWith("image") && imageUrls[index] && (
+                    <img
+                      className="attachment-file"
+                      src={imageUrls[index]}
+                      alt="attachment"
+                    />
+                  )}
+                  <div className="overlay">
+                    <Button color="primary" variant="contained" size="small">
+                      Download
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
-        </>
-      )}
+                <div key={index} className="attachment-filename">
+                  <Typography
+                    sx={{
+                      fontSize: "13px",
+                      color: "#555",
+                      textAlign: "center",
+                    }}
+                  >
+                    {file && file?.name ? file.name : "Unnamed File"}
+                  </Typography>
+
+                  <Close
+                    onClick={() => handleFileRemove(index)}
+                    sx={{
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
+                      borderRadius: "50%",
+                      padding: "4px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </Grid2>
+            ))}
+          </>
+        )}
+      </Grid2>
     </>
   );
 });
