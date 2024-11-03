@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import "./modal.css";
 
-function CustomModal(props) {
+const CustomModal = (props) => {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -143,6 +143,6 @@ function CustomModal(props) {
       </Box>
     </Modal>
   );
-}
+};
 
 export default CustomModal;

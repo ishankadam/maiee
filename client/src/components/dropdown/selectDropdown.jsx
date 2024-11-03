@@ -1,14 +1,6 @@
-import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import _ from "lodash";
 import React from "react";
-import ClearIcon from "@mui/icons-material/Clear";
 const SelectDropdown = (props) => {
   const handleChange = (e) => {
     props.handleEdit(e.target.value, props.config.field);

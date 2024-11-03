@@ -1,100 +1,122 @@
-import React, { useState } from "react";
-import { Button, Box, Typography, Container, Link } from "@mui/material";
+import { Button, Card, Link, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import login from "../../assets/discover.jpeg";
+import { useNavigate } from "react-router-dom";
 import Textfield from "../../components/textfield/textfield";
-// import { useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { login } from "../../api";
-// import { loginSuccess } from "./auth/authAction"; // Import the loginSuccess action
 
 const Login = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
-  const [error, setError] = useState({
-    email: false,
-    password: false,
-  });
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  //   const navigate = useNavigate();
-  //   const dispatch = useDispatch(); // Get the dispatch function
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // try {
-    //   const loggedInUser = await login(user, error, setError, navigate);
-    //   if (loggedInUser) {
-    //     // dispatch(loginSuccess(loggedInUser));
-    //     navigate("/jobs/list"); // Redirect to the homepage or another route after successful login
-    //   }
-    // } catch (err) {
-    //   console.error("Login failed:", err);
-    // }
-  };
+  useEffect(() => {
+    if (user.username.trim().length < 1 || user.password.trim().length < 1) {
+      setButtonDisabled(true);
+    } else {
+      setButtonDisabled(false);
+    }
+  }, [user]);
 
   const handleEdit = (value, field) => {
-    setUser({ ...user, [field]: value });
+    setUser((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogin = () => {
+    if (user.username === "ishan" && user.password === "Ishan@123") {
+      navigate("/dashboard");
+    }
   };
 
   return (
-    <Container maxWidth="xs" className="login-container">
-      <Box sx={{ mt: 12 }} className="box">
-        <Typography variant="h5" gutterBottom className="login-typography">
-          Login
+    <Card
+      sx={{
+        display: "flex",
+        height: "70%",
+        width: "70%",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: "30px",
+      }}
+    >
+      {/* Image Section */}
+      <div
+        style={{
+          flex: 1,
+          maxWidth: "50%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          key={`login-Thumbnail`}
+          src={login}
+          alt={`login-Thumbnail`}
+          style={{
+            width: "400px",
+            height: "600px",
+            borderRadius: "2%",
+            objectFit: "cover",
+          }}
+        />
+      </div>
+
+      {/* Form Section */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "20px",
+          maxWidth: "50%",
+        }}
+      >
+        <Typography variant="body1" sx={{ marginBottom: "20px" }}>
+          LOGIN TO YOUR ACCOUNT
         </Typography>
-        <form onSubmit={handleSubmit} className="login-form">
-          <Textfield
-            id="login-email"
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            value={user.email}
-            error={error.email}
-            errorObj={error}
-            setError={setError}
-            helperText={error.email ? "Please enter correct Email" : ""}
-            config={{ field: "email", type: "email" }}
-            handleEdit={handleEdit}
-          />
-          <Textfield
-            id="login-password"
-            label="Password"
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            required
-            type="password"
-            value={user.password}
-            error={error.password}
-            errorObj={error}
-            setError={setError}
-            helperText={error.password ? "Please enter correct password" : ""}
-            config={{ field: "password", type: "password" }}
-            handleEdit={handleEdit}
-          />
-          <Link
-            className="sign-up-link"
-            // onClick={() => {
-            //   navigate("/signup");
-            // }}
-          >
-            Not a Member? Sign up
-          </Link>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className="login-button"
-          >
-            Login
-          </Button>
-        </form>
-      </Box>
-    </Container>
+        <Typography
+          variant="h4"
+          sx={{
+            marginBottom: "20px",
+            fontWeight: "bold",
+            display: "flex",
+            justifyContent: "left",
+          }}
+        >
+          WELCOME BACK!
+        </Typography>
+        <Textfield
+          label="Username"
+          config={{ field: "username" }}
+          sx={{ marginTop: "20px" }}
+          handleEdit={handleEdit}
+        />
+        <Textfield
+          label="Password"
+          config={{ field: "password" }}
+          sx={{ marginTop: "20px", marginBottom: "10px" }}
+          handleEdit={handleEdit}
+        />
+
+        <Button
+          color="success"
+          variant="contained"
+          sx={{ marginTop: "20px", marginBottom: "10px" }}
+          disabled={buttonDisabled}
+          onClick={handleLogin}
+        >
+          LOGIN
+        </Button>
+        <Link href="#" sx={{ marginBottom: "20px" }}>
+          Forgot Password?
+        </Link>
+      </div>
+    </Card>
   );
 };
 

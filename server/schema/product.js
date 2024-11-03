@@ -8,19 +8,27 @@ const productSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: function (v) {
-        if (typeof v === "string" || v instanceof String) {
-          return false;
-        }
+        return typeof v === "number"; // Ensure it's a number
       },
-      message: "Value is not a  number",
+      message: "Value must be a number",
     },
   },
-  name: String,
-  price: Number,
-  description: String,
-  sizes: Array,
-  garmentDetails: Array,
-  deliveryIn: Array,
+  name: {
+    type: String,
+    required: true, // Make name required
+  },
+  category: {
+    type: String,
+    required: true, // Make category required
+  },
+  subcategory: {
+    type: String,
+    required: true, // Make subcategory required
+  },
+  images: {
+    type: [String], // Change to an array of strings for multiple images
+    required: true, // Make it required to have at least one image URL
+  },
 });
 
 // Create the model

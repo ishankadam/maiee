@@ -15,7 +15,6 @@ import lace5 from "./assets/lace-5.jpg";
 import lace6 from "./assets/lace-6.jpg";
 import lace7 from "./assets/lace-6.jpg";
 import lace8 from "./assets/lace-6.jpg";
-import { Description } from "@mui/icons-material";
 
 export const categories = [
   { label: "LACES", value: "laces" },
@@ -35,11 +34,36 @@ export const productType = [
   { label: "VELVET", value: "velvet" },
 ];
 
+export const basicSubcategories = [
+  "COTTON",
+  "NYLON",
+  "SILK",
+  "WOOL",
+  "LINEN",
+  "VELVET",
+];
+
+export const dashboardTabValue = [
+  { label: "Products", value: "one" },
+  { label: "Categories", value: "two" },
+  { label: "Stats", value: "three" },
+];
+
 export const adminSettings = ["Profile", "Account", "Dashboard", "Logout"];
 
-export const findLabelByValue = (value) => {
-  const category = categories.find((category) => category.value === value);
-  return category ? category.label : null;
+export const findLabelByValue = (array, value) => {
+  const option = array.find((option) => option.value === value);
+  return option ? option.label : null;
+};
+
+export const urlToFile = async (url, filename) => {
+  // Fetch the image as a Blob
+  const response = await fetch(url);
+  const blob = await response.blob(); // Convert response to a Blob
+
+  // Create a File object from the Blob
+  const file = new File([blob], filename, { type: blob.type });
+  return file; // Return the File object
 };
 
 export const hasEmptyField = (obj) => {
