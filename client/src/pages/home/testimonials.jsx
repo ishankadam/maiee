@@ -2,7 +2,6 @@ import React from "react";
 import { Box, Grid2, Typography, Avatar, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 import { testimonials } from "../../common";
 import "../../css/home.scss";
 

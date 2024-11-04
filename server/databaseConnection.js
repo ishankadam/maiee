@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -23,6 +23,7 @@ mongoose.connection.on("connected", () => {
 
 const ProductRoutes = require("./routes/events");
 app.use("/api", ProductRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Static files
 app.use(express.static("uploads"));

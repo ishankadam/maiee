@@ -1,14 +1,19 @@
 import { Box, Grid2, Typography } from "@mui/material";
-import React from "react";
-import { experticesData } from "../../common";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAllCategories, imageUrl } from "../../api";
 
 const ExperticeSection = () => {
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   const handlePageChange = (item) => {
     navigate("/product", { state: { item } }); // Pass item state if needed
   };
+
+  useEffect(() => {
+    getAllCategories({ setCategories: setCategories });
+  }, []);
 
   return (
     <Box
@@ -37,7 +42,7 @@ const ExperticeSection = () => {
         AREA OF EXPERTICES
       </Typography>
       <Grid2 container spacing={4} justifyContent="center">
-        {experticesData[0].items.map((item, index) => (
+        {categories.map((item, index) => (
           <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <Box
               className="card"
@@ -58,7 +63,7 @@ const ExperticeSection = () => {
               } // Allow keyboard navigation
             >
               <img
-                src={item.imgSrc}
+                src={`${imageUrl}categories/${item.imgSrc}`}
                 alt={item.label || item.name} // Use meaningful alt text
                 style={{ width: "100%", height: "auto", objectFit: "cover" }}
                 onError={(e) => {

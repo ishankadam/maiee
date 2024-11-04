@@ -1,0 +1,50 @@
+[
+  {
+    "categoryId": 564618698,
+    "name": "Laces",
+    "description": "Trims frame elegance, stitching stories in fabric's embrace, while laces weave whispers of timeless grace.",
+    "imgSrc": "laces.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282d5"
+  },
+  {
+    "categoryId": 1068578951,
+    "name": "Appliques",
+    "description": "Appliqué stitches dreams onto fabric's plain, a tapestry of art, where imagination does reign. Each stitch a tale, in the realm of texture, where fabric becomes a canvas, adorned with crafted adventure.",
+    "imgSrc": "appliques.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282d6"
+  },
+  {
+    "categoryId": 277048545,
+    "name": "Fabrics",
+    "description": "Lace, a delicate whisper in fabric's embrace, weaves elegance with threads of timeless grace. Intricate patterns dance, adding a touch of romance to every garment's chance.",
+    "imgSrc": "fabrics.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282d7"
+  },
+  {
+    "categoryId": 1238039908,
+    "name": "Collars",
+    "description": "Collar stands tall, a frame for the neckline's calligraphy, stitching elegance into fashion's symphony. In its curve, style finds a subtle embrace, completing attire with a touch of grace.",
+    "imgSrc": "collars.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282d8"
+  },
+  {
+    "categoryId": 25837236,
+    "name": "Necklines",
+    "description": "Necklines define the shape of a garment's upper opening around the neck and shoulders. They vary widely, from V-necks that elongate the neck to crew necks that provide a classic, close-fitting look. Different necklines, like scoop and boat necks, create distinct styles and suit various body types and occasions.",
+    "imgSrc": "necklines.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282d9"
+  },
+  {
+    "categoryId": 2088878483,
+    "name": "Pockets & More",
+    "description": "We are pleased to offer custom design services tailored to your specific requirements for bulk orders. If you provide us with your design, we can bring your vision to life, ensuring that each piece meets your expectations.",
+    "imgSrc": "pockets.png",
+    "subcategories": ["Cotton", "Nylon", "Silk", "Wool", "Linen", "Velvet"],
+    "_id": "671f0e2a4bc7cb72aba282da"
+  }
+]

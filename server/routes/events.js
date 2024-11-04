@@ -3,7 +3,7 @@ const cors = require("cors");
 const router = express.Router();
 const controller = require("../controller/controllers");
 const corsOptions = {
-  origin: `http://localhost:3000`, // Your frontend URL
+  origin: [`http://localhost:3000`, `http://localhost:3001`], // Your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
@@ -13,31 +13,41 @@ router.use(express.json()); // Middleware to parse JSON request bodies
 
 // Routes
 router.get("/getData", controller.get_all_data);
-router.post("/createProduct", controller.create_product);
-
-router.post("/orders", async (req, res) => {
-  try {
-    const instance = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_SECRET,
-    });
-
-    const options = {
-      amount: 50000, // amount in smallest currency unit
-      currency: "INR",
-      receipt: "receipt_order_74394",
-    };
-
-    const order = await instance.orders.create(options);
-
-    if (!order) return res.status(500).send("Some error occured");
-
-    res.json(order);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
+router.get("/getCategories", controller.get_all_categories);
+router.post(
+  "/createProduct",
+  controller.upload.array("images"),
+  controller.create_product
+);
+router.put(
+  "/editProduct",
+  controller.upload.array("images"),
+  controller.edit_product
+);
+router.delete("/deleteProduct", controller.delete_product);
+router.post(
+  "/createCategory",
+  controller.upload.array("imgSrc"),
+  controller.create_category
+);
+router.delete("/deleteCategory", controller.delete_category);
+router.put(
+  "/editCategory",
+  controller.upload.array("imgSrc"),
+  controller.edit_category
+);
+router.get("/testimonials", controller.getAllTestimonials);
+router.post(
+  "/createTestimonial",
+  controller.upload.array("image"),
+  controller.create_testimonial
+);
+router.delete("/deleteTestimonial", controller.delete_testimonial);
+router.put(
+  "/editTestimonial",
+  controller.upload.array("image"),
+  controller.edit_testimonial
+);
 // Error handling middleware
 router.use((error, req, res, next) => {
   const status = error.status || 500;

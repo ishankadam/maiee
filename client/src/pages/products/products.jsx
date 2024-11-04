@@ -7,7 +7,6 @@ import {
   Grid2,
   Typography,
   Drawer,
-  IconButton,
   Box,
 } from "@mui/material";
 import ProductList from "./productList";
@@ -18,7 +17,6 @@ import { getAllProducts } from "../../api";
 import Footer from "../home/footer";
 import ViewProduct from "./viewProduct";
 import { useLocation, useNavigate } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 const Products = () => {
@@ -44,7 +42,7 @@ const Products = () => {
     data: [],
   });
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -54,22 +52,9 @@ const Products = () => {
   }, [location, navigate, state]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        await getAllProducts(setAllProduct);
-      } catch (err) {
-        setError("Failed to fetch products.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    setLoading(true);
+    getAllProducts({ setProducts: setAllProduct, setLoading });
   }, []);
-
-  const handleModalSubmit = () => {
-    // Implement product submission logic
-  };
 
   const handleModalClose = () => {
     setShowModal({
@@ -216,6 +201,7 @@ const Products = () => {
             {/* ProductList on the right */}
             <Grid2 size={{ xs: 12, sm: 8, md: 9.5 }}>
               <ProductList
+                products={allProduct}
                 productType={productType}
                 setShowProduct={setShowProduct}
               />
@@ -236,10 +222,10 @@ const Products = () => {
         open={showModal.show}
         isEdit={showModal.isEdit}
         data={showModal.data}
-        handleModalSubmit={handleModalSubmit}
         handleModalClose={handleModalClose}
         setShowModal={setShowModal}
         setLoading={setLoading}
+        setAllProduct={setAllProduct}
       />
     </>
   );

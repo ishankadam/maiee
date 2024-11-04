@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  Grid2,
+  Grid,
   Card,
   CardContent,
   CardMedia,
@@ -8,36 +8,35 @@ import {
   Pagination,
 } from "@mui/material";
 import "./productList.css";
-import { allProducts } from "../../common";
 import _ from "lodash";
-import { Padding } from "@mui/icons-material";
+import { imageUrl } from "../../api";
 
 const ProductList = (props) => {
   const [page, setPage] = useState(1);
-  const [products, setProducts] = useState([]);
+  const [displayedProducts, setDisplayedProducts] = useState([]);
 
   useEffect(() => {
-    const productsPerPage = page === 1 ? 12 : 10; // 12 products on the first page, 10 on the rest
+    const productsPerPage = page === 1 ? 12 : 10;
     const startIdx = page === 1 ? 0 : 12 + (page - 2) * 10;
     const endIdx = startIdx + productsPerPage;
 
-    const filteredList = allProducts.filter((item) => {
-      // If selected subCategory is "all", only filter by category
+    // Filter products based on category and subcategory
+    const filteredList = (props.products || []).filter((item) => {
       if (props.productType.subCategory === "all") {
         return item.category === _.lowerCase(props.productType.category);
       } else {
         return (
           item.category === _.lowerCase(props.productType.category) &&
-          item.type === _.lowerCase(props.productType.subCategory)
+          item.subcategory === _.lowerCase(props.productType.subCategory)
         );
       }
     });
 
+    // Paginate the filtered list
     const productList = filteredList.slice(startIdx, endIdx);
-    setProducts(productList);
-  }, [allProducts, page, props.productType]);
+    setDisplayedProducts(productList);
+  }, [props.products, page, props.productType]);
 
-  // Handle page change
   const handlePageChange = (event, value) => {
     setPage(value);
   };
@@ -46,37 +45,33 @@ const ProductList = (props) => {
     props.setShowProduct({
       show: true,
       index: index,
-      data: products,
+      data: displayedProducts,
     });
   };
 
   return (
     <>
-      <Grid2
+      <Grid
         container
         spacing={2}
         sx={{
           background: "#fff",
-          padding: {
-            xs: "8px",
-            sm: "8px",
-            md: "10px",
-          },
+          padding: { xs: "8px", sm: "8px", md: "10px" },
           boxShadow:
             "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
           borderRadius: "5px",
         }}
       >
-        {products && products.length > 0 ? (
-          products.map((product, index) => (
-            <Grid2 size={{ xs: 6, sm: 6, md: 3 }} key={product.productId}>
+        {displayedProducts.length > 0 ? (
+          displayedProducts.map((product, index) => (
+            <Grid item xs={6} sm={6} md={3} key={product.productId}>
               <Card
                 className="product-card"
                 onClick={() => handleViewProduct(index)}
               >
                 <CardMedia
                   component="img"
-                  image={product.image}
+                  image={`${imageUrl}${product.category}/${product.images}`}
                   alt={product.name}
                   sx={{
                     height: {
@@ -85,18 +80,14 @@ const ProductList = (props) => {
                       md: "300px !important",
                     },
                     borderRadius: "3px",
-                    marginBottom: {
-                      xs: "5px",
-                      sm: "8px",
-                      md: "10px",
-                    },
+                    marginBottom: { xs: "5px", sm: "8px", md: "10px" },
                   }}
                 />
                 <CardContent
                   sx={{
                     justifyContent: "center",
                     display: "flex",
-                    padding: "5px !important",
+                    padding: "5px",
                     borderRadius: "3px",
                     background: "#1f2143",
                     backgroundImage:
@@ -108,38 +99,31 @@ const ProductList = (props) => {
                     variant="h6"
                     component="div"
                     sx={{
-                      color: "#fff !important",
-                      verticalAlign: "center",
-                      padding: "2px !important",
-                      margin: "0 !important",
-                      borderRadius: "10px",
+                      color: "#fff",
+                      padding: "2px",
                       fontWeight: "600",
                       letterSpacing: "1px",
-                      fontSize: {
-                        xs: "17px",
-                        sm: "18px",
-                        md: "20px",
-                      },
+                      fontSize: { xs: "17px", sm: "18px", md: "20px" },
                     }}
                   >
                     {product.name}
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid2>
+            </Grid>
           ))
         ) : (
           <Typography className="no-records" variant="h5">
             No records found...
           </Typography>
         )}
-      </Grid2>
+      </Grid>
 
       <Pagination
         color="primary"
         variant="outlined"
         shape="rounded"
-        count={Math.ceil((allProducts.length - 12) / 10) + 1}
+        count={Math.ceil((props.products?.length - 12) / 10) + 1}
         page={page}
         onChange={handlePageChange}
         sx={{

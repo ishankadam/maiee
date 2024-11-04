@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -6,21 +7,27 @@ import {
   Typography,
   IconButton,
   Stack,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { categories, productType } from "../../common";
 import SelectDropdown from "../dropdown/selectDropdown";
 import UploadFiles from "../upload/uploadFiles";
-import { createProduct } from "../../api";
+import { createProduct, editProduct } from "../../api";
 
 const ProductForm = (props) => {
+  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [products, setProducts] = useState([]);
   const [currentProduct, setCurrentProduct] = useState({
     category: "",
     subcategory: "",
-    image: null,
+    images: null,
   });
   const [images, setImages] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleChange = (value, field) => {
     setCurrentProduct((prevDetails) => ({
@@ -34,35 +41,78 @@ const ProductForm = (props) => {
   };
 
   useEffect(() => {
-    if (images.length > 0) {
+    if (images && Array.isArray(images) && images.length > 0) {
       const newProducts = images.map((file) => ({
         name: file.name,
         category: currentProduct.category,
         subcategory: currentProduct.subcategory,
-        image: file,
+        images: file,
       }));
       setProducts(newProducts);
+
+      if (props.isEdit) {
+        setCurrentProduct((prevDetails) => ({
+          ...prevDetails,
+          images: images[0], // Assign the images array directly
+          name: newProducts[0]?.name || prevDetails.name, // Update name from the first item or keep the previous name
+        }));
+      }
     }
   }, [images, currentProduct.category, currentProduct.subcategory]);
 
-  const handleNewProduct = (e) => {
-    e.preventDefault();
-    if (
-      !currentProduct.category ||
-      !currentProduct.subcategory ||
-      products.length === 0
-    ) {
-      alert("Please fill all required fields and upload images.");
-      return;
-    } else {
-      props.setLoading(true);
-      createProduct({ products, setLoading: props.setLoading });
+  useEffect(() => {
+    if (props.isEdit && props.data) {
+      setCurrentProduct({
+        productId: props.data.productId,
+        name: props.data.name,
+        category: props.data.category,
+        subcategory: props.data.subcategory,
+        images: Array.isArray(props.data.images)
+          ? props.data.images
+          : [props.data.images],
+      });
+      setImages(
+        Array.isArray(props.data.images)
+          ? props.data.images
+          : [props.data.images]
+      );
     }
-    props.handleModalClose();
+  }, [props.data, props.isEdit]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (props.isEdit) {
+        await editProduct({
+          products: currentProduct,
+          setProducts: props.setAllProduct,
+          setLoading: props.setLoading,
+        });
+        setSnackbarMessage("Product updated successfully!");
+      } else {
+        await createProduct({
+          products,
+          setLoading: props.setLoading,
+          setAllProduct: props.setAllProduct,
+        });
+        setSnackbarMessage("Product created successfully!");
+      }
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      props.handleModalClose();
+    } catch (error) {
+      console.error("Error processing product:", error);
+      setSnackbarMessage("Error processing product.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
   };
 
-  const handleClose = () => {
-    props.handleModalClose();
+  const isFormValid =
+    currentProduct.category && currentProduct.subcategory && images.length > 0;
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -113,7 +163,7 @@ const ProductForm = (props) => {
           >
             {props.isEdit ? "Edit Product" : "Create Product"}
           </Typography>
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={props.handleModalClose}>
             <CloseIcon />
           </IconButton>
         </Stack>
@@ -125,7 +175,6 @@ const ProductForm = (props) => {
             margin="normal"
             fullWidth
             required
-            select
             name="category"
             value={currentProduct.category}
             config={{ field: "category" }}
@@ -140,7 +189,6 @@ const ProductForm = (props) => {
             margin="normal"
             fullWidth
             required
-            select
             name="type"
             value={currentProduct.subcategory}
             config={{ field: "subcategory" }}
@@ -158,29 +206,47 @@ const ProductForm = (props) => {
           }}
         >
           <UploadFiles
-            sx={{
-              height: "200px",
-            }}
-            updateData={(files) => handleFileUpload(files)}
-            isEdit={true}
+            updateData={handleFileUpload}
+            isEdit={props.isEdit}
+            images={images}
             file={currentProduct.image}
+            category={currentProduct.category}
             acceptedFiles="image/png, image/jpeg"
             parentClass="product-form-container"
           />
         </Box>
-
-        <Box display="flex" justifyContent="space-between">
-          <Button variant="outlined" color="error" onClick={handleClose}>
+        <Box display="flex" justifyContent="space-between" mt="auto">
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={props.handleModalClose}
+          >
             Cancel
           </Button>
           <Button
             variant="contained"
             color="success"
-            onClick={handleNewProduct}
+            onClick={handleSubmit}
+            disabled={!isFormValid}
           >
             {props.isEdit ? "Save" : "Add"}
           </Button>
         </Box>
+
+        <Snackbar
+          open={snackbarOpen}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={4000}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbarSeverity}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Modal>
   );

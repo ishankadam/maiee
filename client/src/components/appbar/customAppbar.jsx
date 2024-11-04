@@ -23,7 +23,7 @@ import { adminSettings } from "../../common";
 
 const CustomAppbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isAdmin] = useState(false);
+  const [isAdmin] = useState(false); // Replace with actual admin state logic
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -37,6 +37,10 @@ const CustomAppbar = () => {
 
   const handlePageChange = (pageName) => {
     navigate(`/${pageName}`);
+  };
+
+  const handleScrollToSection = (section) => {
+    navigate("/", { state: { scrollTo: section } });
   };
 
   const toggleDrawer = (open) => (event) => {
@@ -56,6 +60,7 @@ const CustomAppbar = () => {
       sx={{
         backgroundColor: "#ffffff",
         boxShadow: "0 1px 1px 0 rgba(0, 0, 0, .16) !important",
+        zIndex: 1201,
       }}
     >
       <Toolbar>
@@ -105,7 +110,7 @@ const CustomAppbar = () => {
             </Button>
             <Button
               color="inherit"
-              onClick={() => handlePageChange("aboutus")}
+              onClick={() => handleScrollToSection("aboutSection")}
               sx={{
                 color: "#33376F",
                 fontWeight: "700",
@@ -118,7 +123,7 @@ const CustomAppbar = () => {
             </Button>
             <Button
               color="inherit"
-              onClick={() => handlePageChange("contactus")}
+              onClick={() => handleScrollToSection("contactSection")}
               sx={{
                 color: "#33376F",
                 fontWeight: "700",
@@ -182,12 +187,16 @@ const CustomAppbar = () => {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => handlePageChange("aboutus")}>
+              <ListItemButton
+                onClick={() => handleScrollToSection("aboutSection")}
+              >
                 <ListItemText primary="About Us" />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton onClick={() => handlePageChange("contactus")}>
+              <ListItemButton
+                onClick={() => handleScrollToSection("contactSection")}
+              >
                 <ListItemText primary="Contact Us" />
               </ListItemButton>
             </ListItem>

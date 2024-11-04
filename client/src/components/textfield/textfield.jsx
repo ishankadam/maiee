@@ -79,6 +79,7 @@ const Textfield = (props) => {
       disabled={props.disabled}
       required={props.config?.isRequired}
       onChange={(e) => handleTextfieldValue(e.target.value)}
+      multiline={props.multiline}
       inputProps={props.inputProps}
     ></TextField>
   );
