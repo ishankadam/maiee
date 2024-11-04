@@ -72,7 +72,8 @@ const UploadFiles = forwardRef((props, ref) => {
   }, [files, props.category]);
 
   return (
-    <div id="file-upload-container">
+    <>
+      {/* <div id="file-upload-container"> */}
       <form id="form-file-upload" onSubmit={(e) => e.preventDefault()}>
         <input
           ref={inputRef}
@@ -99,33 +100,70 @@ const UploadFiles = forwardRef((props, ref) => {
           </div>
         </label>
       </form>
+      <Grid2
+        container
+        spacing={2}
+        sx={{ display: "flex", justifyContent: "center", mt: 2 }}
+      >
+        {files.length > 0 && (
+          // <div className="files-preview">
 
-      {files.length > 0 && (
-        <div className="files-preview">
-          {files.map((file, index) => (
-            <div key={index} className="attachment-filename">
-              <Typography>{file instanceof File ? file.name : file}</Typography>
-              <Close onClick={() => handleFileRemove(index)} />
-              <div className="image-container">
-                {/* Display image preview */}
-                {filePreviews[index] && (
-                  <img
-                    className="attachment-file"
-                    src={filePreviews[index]}
-                    alt="attachment"
-                  />
-                )}
-                <div className="overlay">
-                  <Button color="primary" variant="contained" size="small">
-                    Download
-                  </Button>
+          <>
+            {files.map((file, index) => (
+              <Grid2
+                item
+                xs={6}
+                md={4}
+                key={index}
+                className="attachment-filename"
+                sx={{
+                  border: "1px solid #ccc",
+                  padding: "5px !important",
+                  position: "relative",
+                  width: "200px",
+                }}
+              >
+                <div className="image-container">
+                  {/* Display image preview */}
+                  {filePreviews[index] && (
+                    <img
+                      className="attachment-file"
+                      src={filePreviews[index]}
+                      alt="attachment"
+                    />
+                  )}
                 </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+                <div key={index} className="attachment-filename">
+                  <Typography
+                    sx={{
+                      fontSize: "13px",
+                      color: "#555",
+                      textAlign: "center",
+                    }}
+                  >
+                    {file instanceof File ? file.name : file}
+                  </Typography>
+
+                  <Close
+                    onClick={() => handleFileRemove(index)}
+                    sx={{
+                      position: "absolute",
+                      top: "5px",
+                      right: "5px",
+                      borderRadius: "50%",
+                      padding: "4px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </Grid2>
+            ))}
+          </>
+          // </div>
+        )}
+      </Grid2>
+      {/* </div> */}
+    </>
   );
 });
 

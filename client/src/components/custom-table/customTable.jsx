@@ -84,7 +84,7 @@ const CustomTable = (props) => {
             label={label}
             color="primary"
             variant="outlined"
-            sx={{ marginBottom: 1 }}
+            sx={{ marginBottom: 1, m: 1 }}
           />
         ));
         break;
@@ -149,7 +149,15 @@ const CustomTable = (props) => {
   };
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          mx: 3,
+          mt: 3,
+          width: "auto",
+          // margin: "5px 20px",
+        }}
+      >
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="job-table-header">
             <TableRow sx={{ position: "sticky", zIndex: 900, top: 0 }}>
@@ -158,6 +166,13 @@ const CustomTable = (props) => {
                   align={column.align}
                   key={`header-${column.id}`}
                   id={`${column.id}-column-header`}
+                  sx={{
+                    fontWeight: "bold", // Makes the header bold
+                    fontSize: "15px", // Sets the font size to 16px
+                    textTransform: "capitalize",
+                    fontFamily: "'Roboto Serif', serif",
+                    width: "22%",
+                  }}
                 >
                   {_.upperCase(column.label)}
                 </TableCell>
@@ -192,6 +207,10 @@ const CustomTable = (props) => {
         </Table>
       </TableContainer>
       <TablePagination
+        sx={{
+          mx: 3,
+          // margin: "5px 20px",
+        }}
         component="div"
         count={rowData.length}
         page={page}

@@ -87,7 +87,7 @@ const TestimonialModal = (props) => {
     <Modal open={props.open} onClose={handleClose}>
       <Box
         sx={{
-          width: 600,
+          width: { xs: "250px", sm: "550px", md: "650px", lg: "700px" },
           maxWidth: "80vw",
           maxHeight: "90vh",
           bgcolor: "background.paper",
@@ -129,7 +129,15 @@ const TestimonialModal = (props) => {
           </IconButton>
         </Stack>
 
-        <Box mt={2} mb={2}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: { xs: "380px", sm: "400px", md: "400px", lg: "400px" }, // Adjust as needed
+            overflowY: "auto",
+            mb: 2,
+          }}
+        >
           <Textfield
             label="Name"
             variant="outlined"
@@ -139,9 +147,11 @@ const TestimonialModal = (props) => {
             value={testimonial.name}
             config={{ field: "name" }}
             handleEdit={handleChange}
+            sx={{
+              mb: 2,
+              mt: 2,
+            }}
           />
-        </Box>
-        <Box mt={2} mb={2}>
           <Textfield
             label="Comments"
             variant="outlined"
@@ -152,20 +162,24 @@ const TestimonialModal = (props) => {
             config={{ field: "comments" }}
             handleEdit={handleChange}
             multiline={true}
+            sx={{
+              mb: 2,
+            }}
           />
+
+          <Box mb={2}>
+            <UploadFiles
+              updateData={(files) => handleFileUpload(files)}
+              isEdit={props.isEdit}
+              images={images}
+              file={testimonial.image}
+              category="testimonial"
+              acceptedFiles="image/png, image/jpeg"
+              parentClass="testimonial-form-container"
+            />
+          </Box>
         </Box>
 
-        <Box mb={2}>
-          <UploadFiles
-            updateData={(files) => handleFileUpload(files)}
-            isEdit={props.isEdit}
-            images={images}
-            file={testimonial.image}
-            category="testimonial"
-            acceptedFiles="image/png, image/jpeg"
-            parentClass="testimonial-form-container"
-          />
-        </Box>
         <Box display="flex" justifyContent="space-between" mt="auto">
           <Button variant="outlined" color="error" onClick={handleClose}>
             Cancel

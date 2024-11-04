@@ -96,7 +96,7 @@ const CreateCategory = (props) => {
     <Modal open={props.open} onClose={handleClose}>
       <Box
         sx={{
-          width: 600,
+          width: { xs: "250px", sm: "550px", md: "650px", lg: "700px" },
           maxWidth: "80vw",
           maxHeight: "90vh",
           bgcolor: "background.paper",
@@ -138,7 +138,15 @@ const CreateCategory = (props) => {
           </IconButton>
         </Stack>
 
-        <Box mt={2} mb={2}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: { xs: "380px", sm: "400px", md: "400px", lg: "400px" }, // Adjust as needed
+            overflowY: "auto",
+            mb: 2,
+          }}
+        >
           <Textfield
             label="Name"
             variant="outlined"
@@ -150,9 +158,12 @@ const CreateCategory = (props) => {
             value={category.name}
             config={{ field: "name" }}
             handleEdit={handleChange}
+            sx={{
+              mb: 2,
+              mt: 2,
+            }}
           />
-        </Box>
-        <Box mt={2} mb={2}>
+
           <Textfield
             label="Description"
             variant="outlined"
@@ -166,9 +177,11 @@ const CreateCategory = (props) => {
             config={{ field: "description" }}
             handleEdit={handleChange}
             multiline={true}
+            sx={{
+              mb: 2,
+            }}
           />
-        </Box>
-        <Box mb={2}>
+
           <ChipTextfield
             label="Sub-Category"
             variant="outlined"
@@ -181,19 +194,21 @@ const CreateCategory = (props) => {
             config={{ field: "subcategories" }}
             handleEdit={handleChange}
             predefinedOptions={basicSubcategories}
+            sx={{
+              mb: 2,
+            }}
           />
-        </Box>
-
-        <Box mb={2}>
-          <UploadFiles
-            updateData={(files) => handleFileUpload(files)}
-            isEdit={props.isEdit}
-            images={images}
-            file={category.imgSrc}
-            category="categories"
-            acceptedFiles="image/png, image/jpeg"
-            parentClass="category-form-container"
-          />
+          <Box mb={2}>
+            <UploadFiles
+              updateData={(files) => handleFileUpload(files)}
+              isEdit={props.isEdit}
+              images={images}
+              file={category.imgSrc}
+              category="categories"
+              acceptedFiles="image/png, image/jpeg"
+              parentClass="category-form-container"
+            />
+          </Box>
         </Box>
         <Box display="flex" justifyContent="space-between" mt="auto">
           <Button variant="outlined" color="error" onClick={handleClose}>

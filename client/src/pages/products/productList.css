@@ -54,10 +54,6 @@
   text-align: center;
 }
 
-.product-card .MuiCardContent-root .MuiTypography-root {
-  color: #33376f; /* Consistent color for product names */
-}
-
 .MuiPagination-root {
   margin-top: 20px;
   margin-bottom: 20px;

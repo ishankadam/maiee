@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useTheme } from "@mui/material/styles";
+import { imageUrl } from "../../api";
 
 const ViewProduct = (props) => {
   const theme = useTheme();
@@ -31,6 +32,7 @@ const ViewProduct = (props) => {
 
   useEffect(() => {
     setIndex(props.index);
+    console.log(props.data);
   }, [props.index]);
 
   const handleClose = () => {
@@ -136,7 +138,7 @@ const ViewProduct = (props) => {
           )}
           <Box
             component="img"
-            src={props.data[index].image}
+            src={`${imageUrl}${props.data[index].category}/${props.data[index].images}`}
             alt={`Image ${index + 1}`}
             sx={{
               width: isMobile ? "100%" : "350px",

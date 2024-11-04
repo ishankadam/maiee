@@ -118,7 +118,7 @@ const ProductForm = (props) => {
   return (
     <Modal
       open={props.open}
-      onClose={handleClose}
+      onClose={props.handleModalClose}
       sx={{
         display: "flex",
         alignItems: "center",

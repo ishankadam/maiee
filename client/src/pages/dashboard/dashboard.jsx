@@ -1,5 +1,5 @@
 import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import ProductTable from "../products/productTable";
 import {
   getAllCategories,
@@ -9,6 +9,7 @@ import {
 import { dashboardTabValue, findLabelByValue } from "../../common";
 import ManageCategories from "./manageCategories";
 import ManageClients from "./manageStats";
+import SelectDropdown from "../../components/dropdown/selectDropdown";
 
 const Dashboard = () => {
   const [options, setOptions] = useState("Products");
@@ -62,38 +63,122 @@ const Dashboard = () => {
   };
   return (
     <>
+      <Tabs
+        value={tabValue}
+        onChange={handleOptions}
+        aria-label="wrapped label tabs example"
+        centered
+        sx={{
+          mb: 3,
+          color: "#212121",
+          fontWeight: "Bold",
+          bgcolor: "#33376F",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+          "& .MuiTab-root": {
+            fontFamily: "'Roboto Serif', serif",
+            color: "white", // Ensure tabs are white
+            fontWeight: "bold", // Make text bold
+            padding: "12px 16px", // Base padding
+            fontSize: "13px", // Base font size
+            "@media (min-width: 600px)": {
+              fontFamily: "'Roboto Serif', serif",
+              fontSize: "16px", // Tablet font size
+              padding: "14px 20px", // Tablet padding
+            },
+            "@media (min-width: 960px)": {
+              fontFamily: "'Roboto Serif', serif",
+              fontSize: "17px", // Laptop font size
+              padding: "16px 24px", // Laptop padding
+            },
+          },
+          "& .Mui-selected": {
+            color: "white !important",
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "white",
+            marginBottom: "1px", // White bottom border when a tab is selected
+          },
+        }}
+      >
+        <Tab value="one" label="Products" wrapped />
+        <Tab value="two" label="Categories" />
+        <Tab value="three" label="Statistics" />
+      </Tabs>
+
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
-          p: 3,
+          px: 3,
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center", // Align items vertically center
+          flexDirection: { xs: "column", sm: "row" },
         }}
       >
         <Typography
           variant="h4"
           gutterBottom
-          sx={{ display: "flex", justifyContent: "center" }}
+          sx={{
+            color: "#212121",
+            fontFamily: "'Roboto Serif', serif",
+            fontWeight: "Bold",
+            textAlign: "left", // Always left-align
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.5rem",
+              md: "1.5rem",
+              lg: "1.7rem",
+            },
+          }}
         >
           {options}
         </Typography>
-        <Button
-          variant="contained"
-          onClick={() => handleOpenForm(options)}
-        >{`Add ${options}`}</Button>
-      </Box>
-      <Box sx={{ width: "100%" }}>
-        <Tabs
-          value={tabValue}
-          onChange={handleOptions}
-          aria-label="wrapped label tabs example"
+
+        <Box
+          sx={{
+            width: { xs: "100%", sm: "70%", md: "66%" },
+            display: "flex",
+            alignItems: "center",
+            flexDirection: { xs: "column", sm: "row" },
+          }}
         >
-          <Tab value="one" label="Products" wrapped />
-          <Tab value="two" label="Categories" />
-          <Tab value="three" label="Statistics" />
-        </Tabs>
+          {options === "Products" && (
+            <>
+              <SelectDropdown
+                label="Category"
+                sx={{
+                  marginRight: { xs: "0", sm: "15px" },
+                }}
+              />
+              <SelectDropdown
+                label="Sub Category"
+                sx={{
+                  marginRight: { xs: "0", sm: "15px" },
+                }}
+              />
+            </>
+          )}
+
+          {options !== "Stats" && (
+            <Button
+              variant="contained"
+              onClick={() => handleOpenForm(options)}
+              color="warning"
+              sx={{
+                fontSize: { xs: "11px", sm: "12px", md: "16px" },
+                textTransform: "capitalize",
+                minWidth: "150px",
+                height: "56px",
+                marginTop: "16px !important",
+                marginBottom: "8px !important",
+              }}
+            >
+              {`Add ${options}`}
+            </Button>
+          )}
+        </Box>
       </Box>
+
       {tabValue === "one" && (
         <ProductTable
           products={products}

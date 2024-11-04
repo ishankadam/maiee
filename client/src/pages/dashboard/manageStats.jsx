@@ -112,16 +112,6 @@ const ManageStats = (props) => {
 
   return (
     <div>
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        mb={2}
-        sx={{ margin: "20px 20px" }}
-      >
-        <Button variant="contained" onClick={toggleEdit}>
-          {isEditing ? "Save" : "Edit"}
-        </Button>
-      </Box>
       <Grid
         container
         spacing={3}
@@ -170,13 +160,51 @@ const ManageStats = (props) => {
         ))}
       </Grid>
       <Box
-        display="flex"
-        justifyContent="space-between"
-        mb={2}
-        sx={{ margin: "20px 20px" }}
+        sx={{
+          flexGrow: 1,
+          px: 3,
+          pt: 3,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
       >
-        <Typography variant="h3">Testimonials</Typography>
-        <Button variant="contained" onClick={handleOpenModal}>
+        <Typography
+          variant="h4"
+          gutterBottom
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            color: "#212121",
+            fontFamily: "'Roboto Serif', serif",
+            fontWeight: "Bold",
+            textAlign: {
+              xs: "left",
+              sm: "center",
+              md: "center",
+              lg: "center",
+            },
+            fontSize: {
+              xs: "1.2rem",
+              sm: "1.5rem",
+              md: "1.5rem",
+              lg: "1.7rem",
+            },
+          }}
+        >
+          Testimonials
+        </Typography>
+        <Button
+          variant="contained"
+          color="warning"
+          sx={{
+            fontSize: { xs: "11px", sm: "12px", md: "16px" },
+            position: "sticky", // Keeps the button on the right
+            right: 0,
+            textTransform: "capitalize",
+            marginLeft: "10px",
+          }}
+          onClick={handleOpenModal}
+        >
           Add Testimonials
         </Button>
       </Box>

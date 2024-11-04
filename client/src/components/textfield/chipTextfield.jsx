@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Autocomplete, TextField, Chip } from "@mui/material";
+import "./chipTextfield.css";
 
 const ChipTextfield = (props) => {
   const [inputValue, setInputValue] = useState("");
@@ -44,6 +45,7 @@ const ChipTextfield = (props) => {
             label={option}
             {...getTagProps({ index })}
             key={index}
+            color="primary"
           />
         ))
       }

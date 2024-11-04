@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Grid,
   Card,
   CardContent,
   CardMedia,
   Typography,
   Pagination,
+  Grid2,
 } from "@mui/material";
 import "./productList.css";
 import _ from "lodash";
@@ -51,7 +51,7 @@ const ProductList = (props) => {
 
   return (
     <>
-      <Grid
+      <Grid2
         container
         spacing={2}
         sx={{
@@ -64,7 +64,8 @@ const ProductList = (props) => {
       >
         {displayedProducts.length > 0 ? (
           displayedProducts.map((product, index) => (
-            <Grid item xs={6} sm={6} md={3} key={product.productId}>
+            // added size
+            <Grid2 item size={{ xs: 6, sm: 6, md: 3 }} key={product.productId}>
               <Card
                 className="product-card"
                 onClick={() => handleViewProduct(index)}
@@ -87,7 +88,7 @@ const ProductList = (props) => {
                   sx={{
                     justifyContent: "center",
                     display: "flex",
-                    padding: "5px",
+                    padding: "5px !important",
                     borderRadius: "3px",
                     background: "#1f2143",
                     backgroundImage:
@@ -99,8 +100,8 @@ const ProductList = (props) => {
                     variant="h6"
                     component="div"
                     sx={{
-                      color: "#fff",
-                      padding: "2px",
+                      color: "#fff !important",
+                      padding: "2px !important",
                       fontWeight: "600",
                       letterSpacing: "1px",
                       fontSize: { xs: "17px", sm: "18px", md: "20px" },
@@ -110,14 +111,14 @@ const ProductList = (props) => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
           ))
         ) : (
           <Typography className="no-records" variant="h5">
             No records found...
           </Typography>
         )}
-      </Grid>
+      </Grid2>
 
       <Pagination
         color="primary"

@@ -87,7 +87,14 @@ const Products = () => {
       <Container
         maxWidth="lg"
         className="main-container"
-        sx={{ padding: { xs: "10px", sm: "20px", md: "30px", lg: "20px" } }}
+        sx={{
+          padding: {
+            xs: "10px !important",
+            sm: "20px",
+            md: "30px",
+            lg: "20px",
+          },
+        }}
       >
         <Box
           className="p-header-wrapper"
