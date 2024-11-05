@@ -17,7 +17,6 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-// import ConfirmationModal from "../modal/confirmation-modal";
 import { findLabelByValue } from "../../common";
 import { imageUrl } from "../../api";
 import ConfirmationModal from "../modal/confirmation-modal";

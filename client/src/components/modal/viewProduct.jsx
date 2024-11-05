@@ -22,7 +22,6 @@ const ViewProduct = (props) => {
         <div className="overlay">
           <Button
             color={"primary"}
-            // onClick={() => handleDownload}
             variant="contained"
             size="small"
             startIcon={

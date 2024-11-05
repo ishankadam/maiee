@@ -61,7 +61,6 @@ const Signup = () => {
     if (field === "workStatus" && value === "experienced") {
       setUser({ ...user, workStatus: value, experience: "" });
     } else {
-      // Update the state for other fields
       setUser({ ...user, [field]: value });
     }
   };

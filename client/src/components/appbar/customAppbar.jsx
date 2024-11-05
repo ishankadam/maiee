@@ -23,7 +23,7 @@ import { adminSettings } from "../../common";
 
 const CustomAppbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isAdmin] = useState(false); // Replace with actual admin state logic
+  const [isAdmin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
 

@@ -22,14 +22,19 @@ const ProductList = (props) => {
 
     // Filter products based on category and subcategory
     const filteredList = (props.products || []).filter((item) => {
+      // If category is "all", return all products
+      if (props.productType.category === "all") {
+        return true;
+      }
+      // If subCategory is "all", filter only by category
       if (props.productType.subCategory === "all") {
         return item.category === _.lowerCase(props.productType.category);
-      } else {
-        return (
-          item.category === _.lowerCase(props.productType.category) &&
-          item.subcategory === _.lowerCase(props.productType.subCategory)
-        );
       }
+      // Otherwise, filter by both category and subCategory
+      return (
+        item.category === _.lowerCase(props.productType.category) &&
+        item.subcategory === _.lowerCase(props.productType.subCategory)
+      );
     });
 
     // Paginate the filtered list

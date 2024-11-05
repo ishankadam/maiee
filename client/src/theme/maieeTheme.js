@@ -1179,7 +1179,14 @@ export const timewrapTheme = createTheme({
       endAdornment: {
         display: "none",
       },
+      option: {
+        color: "blue !important", // Set the color of the option label to blue
+        "&:hover": {
+          backgroundColor: "rgba(0, 0, 0, 0.1)", // Optional: Change the background color on hover
+        },
+      },
     },
+
     MuiGrid2: {
       root: {
         padding: 0,

@@ -41,7 +41,7 @@ const DiscoverSection = () => {
                 backgroundSize: "100%",
                 borderRadius: "8px",
                 boxShadow: "25px 25px 8px rgba(0, 0, 0, 0.25)",
-                maxHeight: { xs: "0vh", md: "500px" }, // Responsive height
+                maxHeight: { xs: "0vh", md: "500px" },
               }}
             />
           </Grid2>
@@ -115,7 +115,7 @@ const DiscoverSection = () => {
                   color="#33376F"
                   sx={{
                     fontWeight: "bold",
-                    fontSize: { xs: "1.8rem", md: "3rem" }, // Responsive font size
+                    fontSize: { xs: "1.8rem", md: "3rem" },
                   }}
                 >
                   {items.value}
@@ -126,7 +126,7 @@ const DiscoverSection = () => {
                   color="#686B9B"
                   sx={{
                     textTransform: "uppercase",
-                    fontSize: { xs: "1rem", md: "1.2rem" }, // Responsive font size
+                    fontSize: { xs: "1rem", md: "1.2rem" },
                   }}
                 >
                   {items.label}

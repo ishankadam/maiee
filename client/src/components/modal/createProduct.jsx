@@ -17,7 +17,6 @@ import UploadFiles from "../upload/uploadFiles";
 import { createProduct, editProduct } from "../../api";
 
 const ProductForm = (props) => {
-  const [buttonDisabled, setButtonDisabled] = useState(true);
   const [products, setProducts] = useState([]);
   const [currentProduct, setCurrentProduct] = useState({
     category: "",
@@ -53,8 +52,8 @@ const ProductForm = (props) => {
       if (props.isEdit) {
         setCurrentProduct((prevDetails) => ({
           ...prevDetails,
-          images: images[0], // Assign the images array directly
-          name: newProducts[0]?.name || prevDetails.name, // Update name from the first item or keep the previous name
+          images: images[0],
+          name: newProducts[0]?.name || prevDetails.name,
         }));
       }
     }

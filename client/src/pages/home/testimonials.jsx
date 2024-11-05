@@ -1,11 +1,40 @@
-import React from "react";
-import { Box, Grid2, Typography, Avatar, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Typography, Avatar, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { testimonials } from "../../common";
 import "../../css/home.scss";
+import { getAllTestimonials, imageUrl } from "../../api";
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    getAllTestimonials({ setTestimonials });
+  }, []);
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 3) % testimonials.length);
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 3 + testimonials.length) % testimonials.length
+    );
+  };
+
+  const displayedTestimonials = testimonials.slice(
+    currentIndex,
+    currentIndex + 3
+  );
+
+  // Ensure wrap-around to display 3 testimonials if we’re near the end
+  if (displayedTestimonials.length < 3 && testimonials.length > 3) {
+    displayedTestimonials.push(
+      ...testimonials.slice(0, 3 - displayedTestimonials.length)
+    );
+  }
+
   return (
     <Box
       className="testimonials"
@@ -42,92 +71,91 @@ const Testimonials = () => {
         What Our Customers Say
       </Typography>
 
-      <Grid2 container justifyContent="center" alignItems="center" spacing={4}>
-        {testimonials.map((testimonial, index) => (
-          <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-            <Box
-              className="testimonial-card"
+      <Box
+        display="flex"
+        justifyContent="center"
+        gap="20px"
+        flexWrap="wrap"
+        mb={4}
+      >
+        {displayedTestimonials.map((testimonial, index) => (
+          <Box
+            key={index}
+            className="testimonial-card"
+            sx={{
+              padding: "20px",
+              borderRadius: "20px",
+              textAlign: "center",
+              boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+              maxWidth: "300px",
+              margin: "0 auto",
+            }}
+          >
+            <Avatar
+              alt={testimonial.name}
+              src={`${imageUrl}testimonial/${testimonial.image}`}
+              sx={{ width: 70, height: 70, margin: "0 auto 20px" }}
+            />
+            <Typography variant="body1" gutterBottom>
+              {testimonial.comments}
+            </Typography>
+            <Typography
+              variant="h6"
+              color="primary"
+              gutterBottom
               sx={{
-                padding: "20px",
-                borderRadius: "20px",
-                textAlign: "center",
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                color: "#FF7D4D",
+                marginTop: "20px",
+                fontFamily: "'Roboto Serif', serif",
+                fontWeight: "bold",
               }}
             >
-              <Avatar
-                alt={testimonial.name}
-                src={testimonial.image}
-                sx={{ width: 70, height: 70, margin: "0 auto 20px" }}
-              />
-              <Typography variant="body1" gutterBottom>
-                {testimonial.text}
-              </Typography>
-              <Typography
-                variant="h6"
-                color="primary"
-                gutterBottom
-                sx={{
-                  color: "#FF7D4D",
-                  marginTop: "20px",
-                  fontFamily: "'Roboto Serif', serif",
-                  fontWeight: "bold",
-                }}
-              >
-                {testimonial.name}
-              </Typography>
-              <Typography
-                variant="subtitle2"
-                color="textSecondary"
-                sx={{ color: "#ffffff" }}
-              >
-                {testimonial.role}
-              </Typography>
-            </Box>
-          </Grid2>
+              {testimonial.name}
+            </Typography>
+          </Box>
         ))}
-      </Grid2>
+      </Box>
 
       {/* Navigation Buttons */}
-      {true && (
-        <Box
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <IconButton
+          aria-label="previous"
+          onClick={handlePrevious}
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "30px",
+            border: "2px solid white",
+            borderRadius: "50%",
+            textAlign: "center",
+            margin: "3px 20px",
+            background: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(25px)",
           }}
         >
-          <IconButton
-            aria-label="previous"
-            sx={{
-              border: "2px solid white",
-              borderRadius: "50%",
-              textAlign: "center",
-              margin: "3px 20px",
-              background: "rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(25px)",
-            }}
-          >
-            <ArrowBackIosIcon
-              sx={{ color: "white", paddingLeft: "4px", margin: "2px 0" }}
-            />
-          </IconButton>
-          <IconButton
-            aria-label="next"
-            sx={{
-              border: "2px solid white",
-              borderRadius: "50%",
-              textAlign: "center",
-              margin: "3px 20px",
-              background: "rgba(255, 255, 255, 0.15)",
-              backdropFilter: "blur(25px)",
-            }}
-          >
-            <ArrowForwardIosIcon
-              sx={{ color: "white", paddingLeft: "4px", margin: "2px 0" }}
-            />
-          </IconButton>
-        </Box>
-      )}
+          <ArrowBackIosIcon
+            sx={{ color: "white", paddingLeft: "4px", margin: "2px 0" }}
+          />
+        </IconButton>
+        <IconButton
+          aria-label="next"
+          onClick={handleNext}
+          sx={{
+            border: "2px solid white",
+            borderRadius: "50%",
+            textAlign: "center",
+            margin: "3px 20px",
+            background: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(25px)",
+          }}
+        >
+          <ArrowForwardIosIcon
+            sx={{ color: "white", paddingLeft: "4px", margin: "2px 0" }}
+          />
+        </IconButton>
+      </Box>
     </Box>
   );
 };

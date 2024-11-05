@@ -49,7 +49,7 @@ const TestimonialModal = (props) => {
         comments: props.data.comments,
         image: props.data.image,
       });
-      setImages([props.data.image]); // Convert single image name to array for consistency
+      setImages([props.data.image]);
     }
   }, [props.data, props.isEdit]);
 

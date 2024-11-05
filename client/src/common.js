@@ -57,13 +57,11 @@ export const findLabelByValue = (array, value) => {
 };
 
 export const urlToFile = async (url, filename) => {
-  // Fetch the image as a Blob
   const response = await fetch(url);
-  const blob = await response.blob(); // Convert response to a Blob
+  const blob = await response.blob();
 
-  // Create a File object from the Blob
   const file = new File([blob], filename, { type: blob.type });
-  return file; // Return the File object
+  return file;
 };
 
 export const hasEmptyField = (obj) => {
@@ -78,7 +76,6 @@ export const validateEmail = (passedEmail) => {
 };
 
 export const isValidPhoneNumber = (phoneNumber) => {
-  // Regex to check if the cleaned number is a 10-digit number starting with 7-9
   const phoneRegex = /^[7-9]\d{9}$/;
 
   return phoneRegex.test(phoneNumber);
@@ -157,19 +154,19 @@ export const testimonials = [
   {
     name: "Ishan kadam",
     role: "Executive Engineer",
-    image: avatar1, // Replace with actual image URL
+    image: avatar1,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
   },
   {
     name: "Tanvi Gangar",
     role: "Executive Engineer",
-    image: avatar2, // Replace with actual image URL
+    image: avatar2,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
   },
   {
     name: "Aadarsh Kshirsagar",
     role: "Executive Engineer",
-    image: avatar3, // Replace with actual image URL
+    image: avatar3,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.",
   },
 ];

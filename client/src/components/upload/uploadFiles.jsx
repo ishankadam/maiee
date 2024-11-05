@@ -9,7 +9,6 @@ const UploadFiles = forwardRef((props, ref) => {
   const [files, setFiles] = useState([]);
   const inputRef = React.useRef(null);
 
-  // Local state to hold URLs for previews
   const [filePreviews, setFilePreviews] = useState([]);
 
   const handleFileUpdate = (newFiles) => {
@@ -48,14 +47,12 @@ const UploadFiles = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    // Set initial files from props when editing
     if (props.isEdit && props.images && props.images.length > 0) {
       setFiles(props.images);
     }
   }, [props.images, props.isEdit]);
 
   useEffect(() => {
-    // Generate previews only for `File` objects
     const previews = files.map((file) =>
       file instanceof File
         ? URL.createObjectURL(file)
@@ -63,7 +60,6 @@ const UploadFiles = forwardRef((props, ref) => {
     );
     setFilePreviews(previews);
 
-    // Clean up object URLs on unmount
     return () => {
       previews.forEach((preview) => {
         if (preview.startsWith("blob:")) URL.revokeObjectURL(preview);
@@ -83,7 +79,7 @@ const UploadFiles = forwardRef((props, ref) => {
           accept={props.acceptedFiles}
           name="attachment"
           multiple={true}
-          style={{ display: "none" }} // Hide the input element
+          style={{ display: "none" }}
         />
         <label id="label-file-upload" htmlFor="input-file-upload">
           <div>

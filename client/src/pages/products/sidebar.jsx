@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   List,
   ListItem,
@@ -8,118 +8,92 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import "./sidebar.css";
-import { experticesData } from "../../common";
 
-const Sidebar = (props) => {
-  // Use a single state object to manage both selected category and open state
-  const [sidebarState, setSidebarState] = useState({
-    selectedCategory: props.productType.category || {},
-    selectedSubCategory: props.productType.subCategory || "all",
-    open: null, // Represents the currently open category
-  });
+const Sidebar = ({
+  categories,
+  productType: initialProductType,
+  setProductType,
+}) => {
+  const [productType, setProductTypeState] = useState(initialProductType);
 
-  const handleClick = (item, field, categoryName) => {
-    if (field === "category") {
-      // Update the state with the selected category and reset subcategory
-      setSidebarState((prev) => ({
-        ...prev,
-        selectedCategory: item,
-        selectedSubCategory: "all", // Reset subCategory to "all" when changing category
-        open: prev.open === item ? null : item, // Toggle the open state
-      }));
+  const handleCategoryClick = useCallback(
+    (category) => {
+      setProductType((prev) => {
+        const isSameCategory = prev.openCategory === category;
+        return {
+          ...prev,
+          category: isSameCategory ? "all" : category, // Set to "all" to close if same category
+          openCategory: isSameCategory ? null : category, // Close if same category, open if different
+          subCategory: "all", // Reset subcategory on category click
+        };
+      });
+    },
+    [setProductType]
+  );
 
-      props.setProductType((prev) => ({
+  const handleSubCategoryClick = useCallback(
+    (subcategory) => {
+      setProductType((prev) => ({
         ...prev,
-        category: item,
-        subCategory: "all", // Reset subCategory to "all" when changing category
+        subCategory: subcategory, // Set the selected subcategory
       }));
-    } else {
-      // Update subcategory when clicking on subcategory
-      setSidebarState((prev) => ({
-        ...prev,
-        selectedSubCategory: item,
-      }));
+    },
+    [setProductType]
+  );
 
-      props.setProductType((prev) => ({
-        ...prev,
-        category: categoryName, // Keep track of the parent category
-        subCategory: item,
-      }));
-    }
-  };
+  useEffect(() => {
+    setProductTypeState(initialProductType);
+  }, [initialProductType]);
 
   return (
     <div className="sidebar">
       <List>
-        {experticesData.map((category, catIndex) => (
-          <div key={catIndex}>
-            <section className="category-section">
-              <Typography className="category-header">
-                {category.name}
-              </Typography>
-            </section>
-            {category.items.map((item, index) => (
-              <div key={index}>
-                <ListItem
-                  onClick={() =>
-                    handleClick(item.name, "category", category.name)
-                  }
-                  className={
-                    item.name === sidebarState.selectedCategory
-                      ? "highlighted"
-                      : ""
-                  }
+        {categories.length > 0 ? (
+          categories.map((category, index) => (
+            <div key={index}>
+              <ListItem
+                onClick={() => handleCategoryClick(category.name)}
+                aria-expanded={productType.openCategory === category.name}
+              >
+                <ListItemText primary={category.name} />
+                {category.subcategories.length > 0 &&
+                  (productType.openCategory === category.name ? (
+                    <ExpandLess sx={{ color: "black" }} />
+                  ) : (
+                    <ExpandMore sx={{ color: "black" }} />
+                  ))}
+              </ListItem>
+              {category.subcategories.length > 0 && (
+                <Collapse
+                  in={productType.openCategory === category.name}
+                  timeout="auto"
+                  unmountOnExit
                 >
-                  <ListItemText
-                    primary={item.name}
-                    sx={{
-                      fontSize: "22px !important",
-                    }}
-                  />
-                  {item.subcategories.length > 0 &&
-                    (sidebarState.open === item.name ? (
-                      <ExpandLess sx={{ color: "black" }} />
-                    ) : (
-                      <ExpandMore sx={{ color: "black" }} />
+                  <List component="div" disablePadding>
+                    {category.subcategories.map((subitem, subIndex) => (
+                      <ListItem
+                        key={subIndex}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent event bubbling
+                          handleSubCategoryClick(subitem);
+                        }}
+                        className={
+                          subitem === productType.subCategory
+                            ? "highlighted-subcategory"
+                            : ""
+                        }
+                      >
+                        <ListItemText primary={subitem} />
+                      </ListItem>
                     ))}
-                </ListItem>
-                {item.subcategories.length > 0 && (
-                  <Collapse
-                    in={sidebarState.open === item.name}
-                    timeout="auto"
-                    unmountOnExit
-                  >
-                    <List
-                      component="div"
-                      disablePadding
-                      sx={{ border: "1px solid #d6d6d6" }}
-                    >
-                      {item.subcategories.map((subitem, subIndex) => (
-                        <ListItem
-                          key={subIndex}
-                          sx={{
-                            pl: 4,
-                            background: "#edf2f7",
-                          }}
-                          onClick={() =>
-                            handleClick(subitem, "subCategory", item.name)
-                          }
-                          className={
-                            subitem === sidebarState.selectedSubCategory
-                              ? "highlighted-subcategory"
-                              : ""
-                          }
-                        >
-                          <ListItemText primary={subitem} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Collapse>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
+                  </List>
+                </Collapse>
+              )}
+            </div>
+          ))
+        ) : (
+          <Typography>No categories available</Typography>
+        )}
       </List>
     </div>
   );

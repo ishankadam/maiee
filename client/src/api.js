@@ -79,40 +79,37 @@ export const editProduct = async ({ products, setProducts, setLoading }) => {
     if (products.images instanceof File) {
       formData.append("images", products.images);
     } else if (typeof products.images === "string") {
-      // If it's a string (existing images URL), convert it to a File object
       try {
         const file = await urlToFile(
           products.images,
           products.images.split("/").pop()
         );
-        formData.append("images", file); // Append the converted File object to the FormData
+        formData.append("images", file);
       } catch (error) {
         console.error("Error converting URL to File:", error);
-        // Handle error (e.g., notify the user)
       }
     }
   }
 
   const requestOptions = {
     method: "PUT",
-    body: formData, // Use FormData directly
+    body: formData,
   };
 
   try {
     const response = await fetch(`${apiUrl}/editProduct`, requestOptions);
     if (response.ok) {
       const data = await response.json();
-      setProducts(data); // Ensure this returns the data
+      setProducts(data);
     } else {
-      // Handle non-ok responses
-      const errorData = await response.json(); // Optional: Get error details from response
+      const errorData = await response.json();
       throw new Error(errorData.message || "Network response was not ok.");
     }
   } catch (error) {
     console.log(error);
-    throw error; // Re-throw the error to be caught in the caller function
+    throw error;
   } finally {
-    setLoading(false); // Stop loading
+    setLoading(false);
   }
 };
 
@@ -241,40 +238,37 @@ export const editCategory = async ({ category, setCategory, setLoading }) => {
     if (category.imgSrc instanceof File) {
       formData.append("imgSrc", category.imgSrc);
     } else if (typeof category.imgSrc === "string") {
-      // If it's a string (existing imgSrc URL), convert it to a File object
       try {
         const file = await urlToFile(
           category.imgSrc,
           category.imgSrc.split("/").pop()
         );
-        formData.append("imgSrc", file); // Append the converted File object to the FormData
+        formData.append("imgSrc", file);
       } catch (error) {
         console.error("Error converting URL to File:", error);
-        // Handle error (e.g., notify the user)
       }
     }
   }
 
   const requestOptions = {
     method: "PUT",
-    body: formData, // Use FormData directly
+    body: formData,
   };
 
   try {
     const response = await fetch(`${apiUrl}/editCategory`, requestOptions);
     if (response.ok) {
       const data = await response.json();
-      setCategory(data); // Ensure this returns the data
+      setCategory(data);
     } else {
-      // Handle non-ok responses
-      const errorData = await response.json(); // Optional: Get error details from response
+      const errorData = await response.json();
       throw new Error(errorData.message || "Network response was not ok.");
     }
   } catch (error) {
     console.log(error);
-    throw error; // Re-throw the error to be caught in the caller function
+    throw error;
   } finally {
-    setLoading(false); // Stop loading
+    setLoading(false);
   }
 };
 
@@ -385,39 +379,63 @@ export const editTestimonial = async ({
     if (testimonial.image instanceof File) {
       formData.append("image", testimonial.image);
     } else if (typeof testimonial.image === "string") {
-      // If it's a string (existing image URL), convert it to a File object
       try {
         const file = await urlToFile(
           testimonial.image,
           testimonial.image.split("/").pop()
         );
-        formData.append("image", file); // Append the converted File object to the FormData
+        formData.append("image", file);
       } catch (error) {
         console.error("Error converting URL to File:", error);
-        // Handle error (e.g., notify the user)
       }
     }
   }
 
   const requestOptions = {
     method: "PUT",
-    body: formData, // Use FormData directly
+    body: formData,
   };
 
   try {
     const response = await fetch(`${apiUrl}/editTestimonial`, requestOptions);
     if (response.ok) {
       const data = await response.json();
-      setTestimonial(data); // Ensure this returns the data
+      setTestimonial(data);
     } else {
-      // Handle non-ok responses
-      const errorData = await response.json(); // Optional: Get error details from response
+      const errorData = await response.json();
       throw new Error(errorData.message || "Network response was not ok.");
     }
   } catch (error) {
     console.log(error);
-    throw error; // Re-throw the error to be caught in the caller function
+    throw error;
   } finally {
-    setLoading(false); // Stop loading
+    setLoading(false);
   }
+};
+
+export const getStats = async ({ setStats, setLoading }) => {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  return fetch(`${apiUrl}/stats`, requestOptions)
+    .then(async function (response) {
+      if (response.ok) {
+        return await response.json();
+      } else {
+        if (response.status === 401) {
+          console.log("error");
+        }
+      }
+    })
+    .then((data) => {
+      setStats(data);
+      setLoading && setLoading(false);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

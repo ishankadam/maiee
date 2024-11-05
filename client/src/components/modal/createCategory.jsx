@@ -53,7 +53,7 @@ const CreateCategory = (props) => {
         subcategories: props.data.subcategories,
         imgSrc: props.data.imgSrc,
       });
-      setImages([props.data.imgSrc]); // Convert single image name to array for consistency
+      setImages([props.data.imgSrc]);
     }
   }, [props.data, props.isEdit]);
 
@@ -84,7 +84,7 @@ const CreateCategory = (props) => {
       !category.name ||
       !category.subcategories ||
       !category.description ||
-      images.length < 1 // Ensure at least one image is uploaded
+      images.length < 1
     ) {
       setButtonDisabled(true);
     } else {

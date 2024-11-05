@@ -2,10 +2,11 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import discoverImage from "../../assets/discover.jpeg";
 import "../../css/home.scss";
-import { discoverStats, discoverText } from "../../common";
+import { discoverText } from "../../common";
 import React, { useState, useEffect, useRef } from "react";
 import CountUp from "react-countup";
 import { Element } from "react-scroll";
+import { getStats } from "../../api";
 const formattedText = discoverText.split("{{break}}").map((part, index) => (
   <React.Fragment key={index}>
     {part}
@@ -15,6 +16,8 @@ const formattedText = discoverText.split("{{break}}").map((part, index) => (
 
 const DiscoverSection = () => {
   const [isInView, setIsInView] = useState(false);
+  const [data, setData] = useState([]);
+  const [stats, setStats] = useState([]);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -22,22 +25,31 @@ const DiscoverSection = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
-          observer.disconnect(); // Stop observing after triggering once
+          observer.disconnect();
         }
       },
-      { threshold: 0.5 } // Adjust this value to trigger the animation earlier or later
+      { threshold: 0.5 }
     );
 
     if (ref.current) {
       observer.observe(ref.current);
     }
-
+    getStats({ setStats: setData });
     return () => {
       if (ref.current) {
         observer.unobserve(ref.current);
       }
     };
   }, []);
+
+  useEffect(() => {
+    const newStats = [
+      { label: "Designs", value: parseInt(data[0]?.designs) },
+      { label: "Patterns", value: `${data[0]?.patterns}` },
+      { label: "Satisfied Clients", value: `${data[0]?.satisfiedClients}` },
+    ];
+    setStats(newStats);
+  }, [data]);
 
   return (
     <>
@@ -127,7 +139,7 @@ const DiscoverSection = () => {
             alignItems="center"
             spacing={3}
           >
-            {discoverStats.map((items) => {
+            {stats.map((items) => {
               return (
                 <Grid2
                   className="zoom-in"
@@ -145,12 +157,15 @@ const DiscoverSection = () => {
                   >
                     {/* Apply count-up animation when in view */}
                     {isInView ? (
-                      <CountUp
-                        start={0}
-                        end={items.value}
-                        duration={2.5} // Customize duration as needed
-                        delay={0}
-                      />
+                      <>
+                        <CountUp
+                          start={0}
+                          end={items.value}
+                          duration={2.5} // Customize duration as needed
+                          delay={0}
+                        />
+                        {items.label === "Satisfied Clients" && <>+</>}
+                      </>
                     ) : (
                       0
                     )}

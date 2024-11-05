@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Card,
   CardContent,
@@ -17,7 +18,7 @@ const ManageStats = (props) => {
   const [stats, setStats] = useState({
     designs: "6",
     patterns: "238",
-    satisfiedClients: "1,395",
+    satisfiedClients: "500+",
   });
   const [showModal, setShowModal] = useState({
     show: false,
@@ -93,10 +94,6 @@ const ManageStats = (props) => {
 
   const handleChange = (key) => (event) => {
     setStats({ ...stats, [key]: event.target.value });
-  };
-
-  const toggleEdit = () => {
-    setIsEditing((prev) => !prev);
   };
 
   const handleModalClose = () => {

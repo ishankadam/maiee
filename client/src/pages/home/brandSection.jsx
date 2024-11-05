@@ -7,9 +7,8 @@ const BrandSection = () => {
     <Box
       sx={{
         position: "relative",
-        // width: "100vw",
-        height: "100vh", // Full screen height
-        overflow: "hidden", // Ensures the image stays within the viewport
+        height: "100vh",
+        overflow: "hidden",
       }}
     >
       {/* Full-Screen Image */}
@@ -23,8 +22,8 @@ const BrandSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          objectFit: "cover", // Ensures the image covers the entire screen while maintaining aspect ratio
-          zIndex: -1, // Keeps the image behind the text
+          objectFit: "cover",
+          zIndex: -1,
         }}
       />
 
@@ -37,7 +36,7 @@ const BrandSection = () => {
           transform: "translate(-50%, -50%)",
           color: "white",
           textAlign: "center",
-          backgroundColor: "rgba(0, 0, 0, 0)", // Optional: semi-transparent background for contrast
+          backgroundColor: "rgba(0, 0, 0, 0)",
           padding: "20px",
           borderRadius: "8px",
         }}

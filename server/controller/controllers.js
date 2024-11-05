@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const Testimonial = require("../schema/testimonials");
+const Statistics = require("../schema/stats");
 const parentDir = path.join(__dirname, "..");
 
 // Set up storage for multer
@@ -56,11 +57,12 @@ const create_product = async (req, res) => {
     const images = req.files || []; // Safely get images
 
     // Validate the productsData structure
-    if (typeof productsData !== "object" || productsData === null) {
+    if (!Array.isArray(productsData) || productsData.length === 0) {
       return res.status(400).send({
-        error: "Invalid data format. Expecting a product object.",
+        error: "Invalid data format. Expecting an array of product objects.",
       });
     }
+
     // Generate a unique product ID for each product
     for (const file of images) {
       // Create a new product instance for each image
@@ -71,12 +73,21 @@ const create_product = async (req, res) => {
         subcategory: productsData[0].subcategory,
         images: file.filename,
       });
-
       await newCreatedProduct.save();
+
+      // Update statistics
+      const stats = await Statistics.findOne(); // Retrieve the first statistics document
+      if (stats) {
+        stats.patterns = (stats.patterns || 0) + 1; // Increment patterns
+        await stats.save(); // Save the updated stats document
+      } else {
+        // If no stats document exists, you may want to create one or log an error
+        console.error("No stats document found. Consider initializing one.");
+      }
     }
 
-    const product = await Product.find({});
-    res.send(product);
+    const products = await Product.find({}); // Fetch all products
+    res.status(201).send(products); // Send a 201 Created response
   } catch (error) {
     console.log("Error while creating products:", error);
     res
@@ -180,7 +191,21 @@ const edit_product = async (req, res) => {
 
     // Destructure productId and prepare updated product data
     const { productId, ...editedProduct } = editData;
+    const productToBeEdited = await Product.findOne({ productId: productId });
+    const imagePath = path.join(
+      parentDir,
+      "uploads",
+      productToBeEdited.category,
+      productToBeEdited.images[0]
+    );
 
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error("Error deleting image file:", err);
+      } else {
+        console.log("Image file deleted successfully");
+      }
+    });
     // Check if productId is defined
     if (!productId) {
       return res.status(400).send({ error: "productId is required" });
@@ -249,7 +274,22 @@ const edit_category = async (req, res) => {
   try {
     const editData = JSON.parse(req.body.category); // Parse incoming category data
     const { categoryId, ...editedCategory } = editData;
-
+    const categoryToBeEdited = await Category.findOne({
+      categoryId: categoryId,
+    });
+    const imagePath = path.join(
+      parentDir,
+      "uploads",
+      "categories",
+      categoryToBeEdited.imgSrc
+    );
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error("Error deleting image file:", err);
+      } else {
+        console.log("Image file deleted successfully");
+      }
+    });
     // Check if req.files is an object (field names mapped to arrays) or an array directly
     const images = Array.isArray(req.files)
       ? req.files // If `req.files` is directly an array
@@ -364,7 +404,22 @@ const edit_testimonial = async (req, res) => {
   try {
     const editData = JSON.parse(req.body.testimonial); // Parse incoming category data
     const { testimonialId, ...editedTestimonial } = editData;
-
+    const testimonialToBeEdited = await Testimonial.findOne({
+      testimonialId: testimonialId,
+    });
+    const imagePath = path.join(
+      parentDir,
+      "uploads",
+      "testimonial",
+      testimonialToBeEdited.image
+    );
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+        console.error("Error deleting image file:", err);
+      } else {
+        console.log("Image file deleted successfully");
+      }
+    });
     // Check if req.files is an object (field names mapped to arrays) or an array directly
     const images = Array.isArray(req.files)
       ? req.files // If `req.files` is directly an array
@@ -395,6 +450,18 @@ const edit_testimonial = async (req, res) => {
   }
 };
 
+const getStats = async (req, res) => {
+  try {
+    const stats = await Statistics.find({}, { _id: 0 }); // Exclude _id field
+    res.status(200).send(stats);
+  } catch (error) {
+    console.error("Error fetching testimonials:", error);
+    res
+      .status(500)
+      .send({ error: "An error occurred while fetching testimonials." });
+  }
+};
+
 module.exports = {
   get_all_data,
   create_product,
@@ -408,5 +475,6 @@ module.exports = {
   delete_testimonial,
   create_testimonial,
   edit_testimonial,
+  getStats,
   upload,
 };

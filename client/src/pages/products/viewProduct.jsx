@@ -32,7 +32,6 @@ const ViewProduct = (props) => {
 
   useEffect(() => {
     setIndex(props.index);
-    console.log(props.data);
   }, [props.index]);
 
   const handleClose = () => {

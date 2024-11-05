@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebar";
 import {
@@ -13,7 +14,7 @@ import ProductList from "./productList";
 import "./products.css";
 import _ from "lodash";
 import ProductForm from "../../components/modal/createProduct";
-import { getAllProducts } from "../../api";
+import { getAllCategories, getAllProducts } from "../../api";
 import Footer from "../home/footer";
 import ViewProduct from "./viewProduct";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,11 +25,12 @@ const Products = () => {
   const location = useLocation();
   const { state } = location;
   const item = state?.item || "laces";
-
+  const [categories, setCategories] = useState([]);
   const [allProduct, setAllProduct] = useState([]);
   const [productType, setProductType] = useState({
     category: item,
     subCategory: "all",
+    openCategory: null,
   });
   const [showModal, setShowModal] = useState({
     show: false,
@@ -42,7 +44,8 @@ const Products = () => {
     data: [],
   });
 
-  const [loading, setLoading] = useState(false);
+  const [productloading, setProductLoading] = useState(false);
+  const [categoryloading, setCategoryLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -52,8 +55,13 @@ const Products = () => {
   }, [location, navigate, state]);
 
   useEffect(() => {
-    setLoading(true);
-    getAllProducts({ setProducts: setAllProduct, setLoading });
+    setProductLoading(true);
+    setCategoryLoading(true);
+    getAllProducts({
+      setProducts: setAllProduct,
+      setLoading: setProductLoading,
+    });
+    getAllCategories({ setCategories, setLoading: setCategoryLoading });
   }, []);
 
   const handleModalClose = () => {
@@ -82,6 +90,10 @@ const Products = () => {
   const toggleDrawer = (open) => (event) => {
     setIsDrawerOpen(open);
   };
+
+  useEffect(() => {
+    console.log(productType);
+  }, [productType]);
   return (
     <>
       <Container
@@ -173,7 +185,7 @@ const Products = () => {
           >
             Add Product
           </Button> */}
-        {loading ? (
+        {categoryloading && productloading ? (
           <CircularProgress />
         ) : error ? (
           <Typography color="error">{error}</Typography>
@@ -191,6 +203,7 @@ const Products = () => {
               <Sidebar
                 productType={productType}
                 setProductType={setProductType}
+                categories={categories}
               />
             </Drawer>
 
@@ -202,6 +215,7 @@ const Products = () => {
               <Sidebar
                 productType={productType}
                 setProductType={setProductType}
+                categories={categories}
               />
             </Grid2>
 
@@ -231,7 +245,7 @@ const Products = () => {
         data={showModal.data}
         handleModalClose={handleModalClose}
         setShowModal={setShowModal}
-        setLoading={setLoading}
+        setLoading={productloading}
         setAllProduct={setAllProduct}
       />
     </>

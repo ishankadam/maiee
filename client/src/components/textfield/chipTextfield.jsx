@@ -6,23 +6,21 @@ const ChipTextfield = (props) => {
   const [inputValue, setInputValue] = useState("");
   const [values, setValues] = useState([]);
 
-  // Handle Enter key press to add custom value to array
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && inputValue.trim() !== "") {
-      event.preventDefault(); // Prevent form submission or new line in input
+      event.preventDefault();
       if (!values.includes(inputValue.trim())) {
         const updatedValues = [...values, inputValue.trim()];
         setValues(updatedValues);
-        props.handleEdit(updatedValues, props.config.field); // Update parent with new values
+        props.handleEdit(updatedValues, props.config.field);
       }
-      setInputValue(""); // Clear input after adding the value
+      setInputValue("");
     }
   };
 
-  // Handle selection from predefined options
   const handleChange = (event, newValue) => {
-    setValues(newValue); // Update local state
-    props.handleEdit(newValue, props.config.field); // Pass updated values to parent
+    setValues(newValue);
+    props.handleEdit(newValue, props.config.field);
   };
 
   useEffect(() => {
@@ -35,9 +33,9 @@ const ChipTextfield = (props) => {
       sx={props.sx ? props.sx : {}}
       options={props.predefinedOptions}
       value={values}
-      onChange={handleChange} // Updates array when a suggestion is selected
+      onChange={handleChange}
       inputValue={inputValue}
-      onInputChange={(event, newInputValue) => setInputValue(newInputValue)} // Handles input changes separately
+      onInputChange={(event, newInputValue) => setInputValue(newInputValue)}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
           <Chip

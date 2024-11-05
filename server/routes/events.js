@@ -48,6 +48,7 @@ router.put(
   controller.upload.array("image"),
   controller.edit_testimonial
 );
+router.get("/stats", controller.getStats);
 // Error handling middleware
 router.use((error, req, res, next) => {
   const status = error.status || 500;
