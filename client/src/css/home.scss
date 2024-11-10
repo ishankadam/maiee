@@ -34,11 +34,12 @@ ul {
 
 ul li {
   color: rgb(213, 210, 210);
-  padding: 7px;
+  padding: 7px 0px;
 }
 
 ul li:hover,
 .footer-icon:hover {
+  cursor: pointer;
   color: #ff7d4d;
 }
 

@@ -18,7 +18,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import logo from "../../assets/MAIEE_LOGO_without inner shadow (1).png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { adminSettings } from "../../common";
 
 const CustomAppbar = () => {
@@ -26,6 +26,7 @@ const CustomAppbar = () => {
   const [isAdmin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -52,6 +53,33 @@ const CustomAppbar = () => {
     }
     setDrawerOpen(open);
   };
+
+  //code added by aadarsh
+  // Define links based on the current route
+  const links =
+    location.pathname === "/product"
+      ? [
+          {
+            label: "Home",
+            action: () => (window.location.href = window.location.origin),
+          },
+          { label: "Product", action: () => handlePageChange("product") },
+        ]
+      : [
+          {
+            label: "Home",
+            action: () => (window.location.href = window.location.origin),
+          },
+          { label: "Product", action: () => handlePageChange("product") },
+          {
+            label: "About Us",
+            action: () => handleScrollToSection("aboutSection"),
+          },
+          {
+            label: "Contact Us",
+            action: () => handleScrollToSection("contactSection"),
+          },
+        ];
 
   return (
     <AppBar
@@ -95,45 +123,23 @@ const CustomAppbar = () => {
 
           {/* Desktop Navigation (hidden on small screens) */}
           <Box sx={{ display: { xs: "none", sm: "flex", md: "flex" } }}>
-            <Button
-              color="inherit"
-              onClick={() => handlePageChange("product")}
-              sx={{
-                color: "#33376F",
-                fontWeight: "700",
-                padding: "0 20px",
-                fontFamily: "'Roboto Serif', serif",
-                fontSize: "16px",
-              }}
-            >
-              Product
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => handleScrollToSection("aboutSection")}
-              sx={{
-                color: "#33376F",
-                fontWeight: "700",
-                padding: "0 20px",
-                fontFamily: "'Roboto Serif', serif",
-                fontSize: "16px",
-              }}
-            >
-              About Us
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => handleScrollToSection("contactSection")}
-              sx={{
-                color: "#33376F",
-                fontWeight: "700",
-                padding: "0 20px",
-                fontFamily: "'Roboto Serif', serif",
-                fontSize: "16px",
-              }}
-            >
-              Contact Us
-            </Button>
+            {links.map((link) => (
+              <Button
+                key={link.label}
+                color="inherit"
+                onClick={link.action}
+                sx={{
+                  color: "#33376F",
+                  fontWeight: "700",
+                  padding: "0 20px",
+                  fontFamily: "'Roboto Serif', serif",
+                  fontSize: "16px",
+                }}
+              >
+                {link.label}
+              </Button>
+            ))}
+
             {/* Admin Settings Icon (only visible to admins) */}
             {isAdmin && (
               <Tooltip title="Open settings">
@@ -176,30 +182,22 @@ const CustomAppbar = () => {
         {/* Drawer for Mobile Navigation */}
         <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
           <List sx={{ width: 200 }}>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handlePageChange("home")}>
-                <ListItemText primary="Home" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handlePageChange("product")}>
-                <ListItemText primary="Product" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => handleScrollToSection("aboutSection")}
-              >
-                <ListItemText primary="About Us" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => handleScrollToSection("contactSection")}
-              >
-                <ListItemText primary="Contact Us" />
-              </ListItemButton>
-            </ListItem>
+            {links.map((link) => (
+              <ListItem key={link.label} disablePadding>
+                <ListItemButton onClick={link.action}>
+                  <ListItemText
+                    primary={link.label}
+                    sx={{
+                      color: "#33376F",
+                      fontWeight: "700",
+                      padding: "0 20px",
+                      fontFamily: "'Roboto Serif', serif !important ",
+                      fontSize: "16px",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Drawer>
       </Toolbar>

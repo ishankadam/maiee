@@ -8,10 +8,17 @@ import Footer from "./footer";
 import FindUs from "./findUs";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
+import { getAllCategories } from "../../api";
 
 const Home = () => {
   const location = useLocation();
   const [isFirstRender, setIsFirstRender] = useState(true);
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getAllCategories({ setCategories: setCategories });
+  }, []);
 
   useEffect(() => {
     // Only scroll if there's a scrollTo state and it's not the first render
@@ -34,7 +41,10 @@ const Home = () => {
         <DiscoverSection />
       </div>
       <div id="experticeSection">
-        <ExperticeSection />
+        <ExperticeSection
+          categories={categories}
+          setCategories={setCategories}
+        />
       </div>
       <div id="testimonialsSection">
         <Testimonials />
@@ -42,7 +52,7 @@ const Home = () => {
       <div id="contactSection">
         <FindUs />
       </div>
-      <Footer />
+      <Footer categories={categories} />
     </>
   );
 };

@@ -132,7 +132,7 @@ const Products = () => {
                 lg: "center",
               },
               flexGrow: 1, // Ensures title stays centered
-              marginLeft: { xs: "0", sm: "70px", md: "70px", lg: "70px" },
+              marginLeft: { xs: "0" },
               fontSize: {
                 xs: "1.2rem",
                 sm: "1.5rem",
@@ -158,22 +158,6 @@ const Products = () => {
             startIcon={<FilterListIcon />}
           >
             Filters
-          </Button>
-
-          <Button
-            variant="contained"
-            color="warning"
-            // className="filter-button"
-            onClick={handleOpenForm}
-            sx={{
-              fontSize: { xs: "11px", sm: "12px", md: "16px" },
-              position: "sticky", // Keeps the button on the right
-              right: 0,
-              textTransform: "capitalize",
-              marginLeft: "10px",
-            }}
-          >
-            Add Product
           </Button>
         </Box>
 
@@ -230,7 +214,7 @@ const Products = () => {
           </Grid2>
         )}
       </Container>
-      <Footer />
+      <Footer categories={categories} />
       {showProduct.show && (
         <ViewProduct
           open={showProduct.show}
