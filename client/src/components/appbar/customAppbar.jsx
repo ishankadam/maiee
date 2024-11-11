@@ -66,10 +66,6 @@ const CustomAppbar = () => {
           { label: "Product", action: () => handlePageChange("product") },
         ]
       : [
-          {
-            label: "Home",
-            action: () => (window.location.href = window.location.origin),
-          },
           { label: "Product", action: () => handlePageChange("product") },
           {
             label: "About Us",
@@ -191,7 +187,7 @@ const CustomAppbar = () => {
                       color: "#33376F",
                       fontWeight: "700",
                       padding: "0 20px",
-                      fontFamily: "'Roboto Serif', serif !important ",
+                      fontFamily: "'Roboto Serif', serif !important",
                       fontSize: "16px",
                     }}
                   />

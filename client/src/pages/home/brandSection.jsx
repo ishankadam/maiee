@@ -7,7 +7,7 @@ const BrandSection = () => {
     <Box
       sx={{
         position: "relative",
-        height: { xs: "60vh", sm: "100vh", md: "100vh", lg: "100vh" },
+        height: { xs: "55vh", sm: "60vh", md: "100vh", lg: "100vh" },
         overflow: "hidden",
       }}
     >

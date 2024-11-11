@@ -19,22 +19,26 @@ const Footer = (props) => {
     navigate("/", { state: { scrollTo: section } });
   };
 
-  const handlePageChange = (pageName) => {
-    navigate(`/${pageName}`);
+  const handlePageChange = (item) => {
+    navigate("/product", { state: { item } }); // Pass item state if needed
   };
-
   useEffect(() => {
     setCategories(props.categories);
   }, [props.categories]);
 
   return (
     <footer
-      style={{ backgroundColor: "#161C2D", padding: "25px 0", color: "#fff" }}
+      style={{
+        backgroundColor: "#161C2D",
+        padding: "0",
+        paddingTop: "25px",
+        color: "#fff",
+      }}
     >
       <Container sx={{ textAlign: { xs: "center", sm: "left", md: "left" } }}>
-        <Grid2 container spacing={4}>
+        <Grid2 container spacing={1}>
           {/* Left Side (Company Information) */}
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          <Grid2 size={{ xs: 12, sm: 6, md: 6 }}>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
               MAIEE ENTERPRISE
             </Typography>
@@ -63,9 +67,9 @@ const Footer = (props) => {
 
           {/* Center Section (Links) */}
           <Grid2
-            size={{ xs: 12, md: 3 }}
+            size={{ xs: 5, sm: 3, md: 3 }}
             sx={{
-              alignItems: "center",
+              alignItems: { xs: "left", sm: "center", md: "center" },
               display: "flex",
               flexDirection: "column",
             }}
@@ -110,14 +114,15 @@ const Footer = (props) => {
 
           {/* Product Section */}
           <Grid2
-            size={{ xs: 12, md: 3 }}
+            size={{ xs: 7, sm: 3, md: 3 }}
             sx={{
               display: "flex",
               flexDirection: "column",
+              alignItems: "left",
             }}
           >
             <Typography variant="h6" gutterBottom>
-              Product
+              Products
             </Typography>
             <Box
               component="ul"
@@ -133,7 +138,7 @@ const Footer = (props) => {
                 categories.map((category, index) => (
                   <Box component="li" key={index}>
                     <Link
-                      onClick={() => handlePageChange("product")}
+                      onClick={() => handlePageChange(category.name)}
                       color="inherit"
                     >
                       {category.name}

@@ -214,7 +214,7 @@ const Products = () => {
           </Grid2>
         )}
       </Container>
-      <Footer categories={categories} />
+      {/* <Footer categories={categories} /> */}
       {showProduct.show && (
         <ViewProduct
           open={showProduct.show}

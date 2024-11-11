@@ -174,6 +174,7 @@ const ManageStats = (props) => {
             color: "#212121",
             fontFamily: "'Roboto Serif', serif",
             fontWeight: "Bold",
+            alignItems: "center",
             textAlign: {
               xs: "left",
               sm: "center",
@@ -194,11 +195,12 @@ const ManageStats = (props) => {
           variant="contained"
           color="warning"
           sx={{
-            fontSize: { xs: "11px", sm: "12px", md: "16px" },
+            fontSize: { xs: "13px", sm: "14px", md: "16px" },
             position: "sticky", // Keeps the button on the right
             right: 0,
             textTransform: "capitalize",
             marginLeft: "10px",
+            height: "44px",
           }}
           onClick={handleOpenModal}
         >
