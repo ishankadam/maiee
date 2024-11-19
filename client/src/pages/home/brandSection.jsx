@@ -7,7 +7,7 @@ const BrandSection = () => {
     <Box
       sx={{
         position: "relative",
-        height: "100vh",
+        height: { xs: "55vh", sm: "60vh", md: "100vh", lg: "100vh" },
         overflow: "hidden",
       }}
     >
@@ -48,7 +48,7 @@ const BrandSection = () => {
           sx={{
             color: "#E55C35",
             fontWeight: "Bold",
-            fontSize: { xs: "2.5rem", sm: "3rem", md: "4rem", lg: "6rem" },
+            fontSize: { xs: "2.7rem", sm: "3rem", md: "4rem", lg: "6rem" },
           }}
         >
           MAIEE ENTERPRISES

@@ -11,6 +11,9 @@ import React, { useState } from "react";
 import "../../css/findUs.css";
 import findUs1 from "../../assets/findus1.png";
 import { Element } from "react-scroll";
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import MailIcon from "@mui/icons-material/Mail";
+import BusinessIcon from "@mui/icons-material/Business";
 
 const FindUs = () => {
   const [showMap, setShowMap] = useState(false);
@@ -24,7 +27,7 @@ const FindUs = () => {
       <Box
         sx={{
           backgroundColor: "#E1E3FF",
-          padding: { xs: "20px", sm: "30px", md: "40px", lg: "50px" },
+          padding: { xs: "20px", sm: "20px", md: "40px", lg: "50px" },
         }}
       >
         <Typography
@@ -118,12 +121,14 @@ const FindUs = () => {
                     }}
                   >
                     14, Navi Gully, MJ Market, Zaveri Bazaar, Kalbadevi, Mumbai,
-                    Maharashtra 400002{" "}
+                    Maharashtra 400002
+                    <br />
                     <Link
                       component="button"
                       onClick={toggleMapVisibility}
                       sx={{
                         color: "#E55C35",
+                        fontSize: "16px",
                         cursor: "pointer",
                         textDecoration: "underline",
                         "&:hover": {
@@ -140,6 +145,8 @@ const FindUs = () => {
                     component="a"
                     href="mailto:maieenter@gmail.com"
                     sx={{
+                      display: "flex",
+                      alignItems: "center",
                       color: "#494949",
                       fontSize: "16px",
                       fontFamily: "'Roboto Serif', serif",
@@ -149,19 +156,47 @@ const FindUs = () => {
                       },
                     }}
                   >
-                    Email: maieenter@gmail.com
+                    <MailIcon sx={{ color: "#33376F", marginRight: "8px" }} />{" "}
+                    maieenter@gmail.com
                   </Typography>
+
                   <Typography
                     gutterBottom
                     variant="body2"
                     component="div"
                     sx={{
+                      display: "flex",
+                      alignItems: "flex-start", // Ensures alignment at the top on smaller screens
                       color: "#494949",
                       fontSize: "16px",
                       fontFamily: "'Roboto Serif', serif",
+                      mt: 2,
                     }}
                   >
-                    Phone Number: +91 9029390400 / +91 9029390500
+                    <LocalPhoneIcon
+                      sx={{ color: "#33376F", marginRight: "8px" }}
+                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: {
+                          xs: "column",
+                          sm: "column",
+                          md: "row",
+                        }, // Stacks numbers on small screens, row on larger
+                      }}
+                    >
+                      <Box component="span">+91 9029390400 /</Box>
+                      <Box
+                        component="span"
+                        sx={{
+                          marginLeft: { sm: "8px" },
+                          marginTop: { xs: "4px", sm: 0 },
+                        }} // Adds space between numbers
+                      >
+                        +91 9029390500
+                      </Box>
+                    </Box>
                   </Typography>
                 </CardContent>
               </Grid>

@@ -100,7 +100,7 @@ const DiscoverSection = () => {
                   fontWeight: "Bold",
                   textAlign: { xs: "center", md: "left" },
                   fontSize: {
-                    xs: "1rem",
+                    xs: "1.1rem",
                     sm: "1.5rem",
                     md: "1.6rem",
                     lg: "2rem",

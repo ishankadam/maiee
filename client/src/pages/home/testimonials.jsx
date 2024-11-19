@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Avatar, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Avatar,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import "../../css/home.scss";
@@ -8,28 +14,31 @@ import { getAllTestimonials, imageUrl } from "../../api";
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     getAllTestimonials({ setTestimonials });
   }, []);
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 3) % testimonials.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
   };
 
   const handlePrevious = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 3 + testimonials.length) % testimonials.length
+      (prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length
     );
   };
 
-  const displayedTestimonials = testimonials.slice(
-    currentIndex,
-    currentIndex + 3
-  );
+  const displayedTestimonials = isMobile
+    ? testimonials.slice(currentIndex, currentIndex + 1) // Show only one card on mobile
+    : testimonials.slice(currentIndex, currentIndex + 3);
 
-  // Ensure wrap-around to display 3 testimonials if we’re near the end
-  if (displayedTestimonials.length < 3 && testimonials.length > 3) {
+  if (
+    !isMobile &&
+    displayedTestimonials.length < 3 &&
+    testimonials.length > 3
+  ) {
     displayedTestimonials.push(
       ...testimonials.slice(0, 3 - displayedTestimonials.length)
     );
@@ -96,7 +105,16 @@ const Testimonials = () => {
               src={`${imageUrl}testimonial/${testimonial.image}`}
               sx={{ width: 70, height: 70, margin: "0 auto 20px" }}
             />
-            <Typography variant="body1" gutterBottom>
+            <Typography
+              variant="body1"
+              gutterBottom
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "100px",
+              }}
+            >
               {testimonial.comments}
             </Typography>
             <Typography

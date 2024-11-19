@@ -11,13 +11,16 @@ import {
   Alert,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { categories, productType } from "../../common";
 import SelectDropdown from "../dropdown/selectDropdown";
 import UploadFiles from "../upload/uploadFiles";
 import { createProduct, editProduct } from "../../api";
 
 const ProductForm = (props) => {
   const [products, setProducts] = useState([]);
+  const [categoryData, setCategoryData] = useState({
+    categories: [],
+    subcategories: [],
+  });
   const [currentProduct, setCurrentProduct] = useState({
     category: "",
     subcategory: "",
@@ -29,6 +32,23 @@ const ProductForm = (props) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleChange = (value, field) => {
+    if (field === "category") {
+      const selected = props.categories.find(
+        (item) =>
+          item.name.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-") ===
+          value
+      );
+
+      const subcategories =
+        selected?.subcategories.map((subcategory) => ({
+          label: subcategory.toUpperCase(),
+          value: subcategory.toLowerCase().trim(),
+        })) || [];
+      setCategoryData((prev) => ({
+        ...prev,
+        subcategories,
+      }));
+    }
     setCurrentProduct((prevDetails) => ({
       ...prevDetails,
       [field]: value,
@@ -114,6 +134,18 @@ const ProductForm = (props) => {
     setSnackbarOpen(false);
   };
 
+  useEffect(() => {
+    const categories = props.categories.map((item) => ({
+      label: item.name.toUpperCase(),
+      value: item.name.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-"),
+    }));
+
+    setCategoryData((prev) => ({
+      ...prev,
+      categories: categories,
+    }));
+  }, [props.categories]);
+
   return (
     <Modal
       open={props.open}
@@ -178,7 +210,7 @@ const ProductForm = (props) => {
             value={currentProduct.category}
             config={{ field: "category" }}
             handleEdit={handleChange}
-            optionList={categories}
+            optionList={categoryData.categories}
           />
           {/* </Box>
         <Box mb={2}> */}
@@ -192,7 +224,7 @@ const ProductForm = (props) => {
             value={currentProduct.subcategory}
             config={{ field: "subcategory" }}
             handleEdit={handleChange}
-            optionList={productType}
+            optionList={categoryData.subcategories}
           />
         </Box>
 

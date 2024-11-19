@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { categories, productType } from "../../common";
+import { productType } from "../../common";
 import CustomTable from "../../components/custom-table/customTable";
 import ProductForm from "../../components/modal/createProduct";
 import { deleteProduct } from "../../api";
@@ -57,7 +57,7 @@ const ProductTable = (props) => {
       key: "category",
       type: "text",
       align: "center",
-      optionList: categories,
+      optionList: props.categories,
       capitalize: true,
     },
     {
@@ -114,6 +114,7 @@ const ProductTable = (props) => {
           setShowModal={setShowModal}
           setLoading={props.setLoading}
           setAllProduct={props.setProducts}
+          categories={props.categories}
         />
       )}
     </div>

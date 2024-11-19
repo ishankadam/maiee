@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Tab, Tabs, Typography, Grid2 } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
 import ProductTable from "../products/productTable";
 import {
@@ -10,16 +10,26 @@ import { dashboardTabValue, findLabelByValue } from "../../common";
 import ManageCategories from "./manageCategories";
 import ManageClients from "./manageStats";
 import SelectDropdown from "../../components/dropdown/selectDropdown";
+import _ from "lodash";
 
 const Dashboard = () => {
   const [options, setOptions] = useState("Products");
   const [products, setProducts] = useState([]);
+  const [filterDataProducts, setfilterDataProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [productsloading, setProductsLoading] = useState(false);
   const [categoryloading, setCategoryLoading] = useState(false);
   const [testimonialsloading, setTestimonialsLoading] = useState(false);
   const [tabValue, setTabValue] = React.useState("one");
+  const [filterOptions, setFilterOptions] = useState({
+    categories: "",
+    subcategories: "",
+  });
+  const [categoryData, setCategoryData] = useState({
+    categories: [],
+    subcategories: [],
+  });
   const [showCategoryModal, setShowCategoryModal] = useState({
     show: false,
     isEdit: false,
@@ -61,6 +71,66 @@ const Dashboard = () => {
     setOptions(findLabelByValue(dashboardTabValue, newValue));
     setTabValue(newValue);
   };
+
+  useEffect(() => {
+    const categoriesArray = categories.map((item) => ({
+      label: item.name.toUpperCase(),
+      value: item.name.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-"),
+    }));
+
+    setCategoryData((prev) => ({
+      ...prev,
+      categories: categoriesArray,
+    }));
+  }, [categories]);
+
+  const handleChange = (value, field) => {
+    if (field === "categories") {
+      const selected = categories.find(
+        (item) =>
+          item.name.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-") ===
+          value
+      );
+
+      const subcategories =
+        selected?.subcategories.map((subcategory) => ({
+          label: subcategory.toUpperCase(),
+          value: subcategory.toLowerCase().trim(),
+        })) || [];
+      setCategoryData((prev) => ({
+        ...prev,
+        subcategories,
+      }));
+      setFilterOptions((prevDetails) => ({
+        ...prevDetails,
+        categories: value,
+        subcategories: "",
+      }));
+    } else {
+      setFilterOptions((prevDetails) => ({
+        ...prevDetails,
+        [field]: value,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    const filteredList = (products || []).filter((item) => {
+      const categoryFilter = filterOptions.categories
+        ? item.category === _.lowerCase(filterOptions.categories)
+        : true;
+
+      const subcategoryFilter = filterOptions.subcategories
+        ? item.subcategory === _.lowerCase(filterOptions.subcategories)
+        : true;
+
+      return categoryFilter && subcategoryFilter;
+    });
+
+    setfilterDataProducts(filteredList);
+    console.log(filterOptions);
+  }, [filterOptions, products]);
+
   return (
     <>
       <Tabs
@@ -105,88 +175,128 @@ const Dashboard = () => {
         <Tab value="three" label="Statistics" />
       </Tabs>
 
-      <Box
-        component="main"
+      <Grid2
+        container
         sx={{
+          fontSize: "12px",
           px: 3,
           display: "flex",
+          alignContent: "flex-end",
           justifyContent: "space-between",
           alignItems: "center", // Align items vertically center
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: {
+            xs: options === "Products" ? "column" : "row",
+            sm: "row",
+          },
         }}
+        size={12}
       >
-        <Typography
-          variant="h4"
-          gutterBottom
+        <Grid2
           sx={{
-            color: "#212121",
-            fontFamily: "'Roboto Serif', serif",
-            fontWeight: "Bold",
-            textAlign: "left", // Always left-align
-            fontSize: {
-              xs: "1.2rem",
-              sm: "1.5rem",
-              md: "1.5rem",
-              lg: "1.7rem",
-            },
+            order: { xs: 1, sm: 1 },
           }}
         >
-          {options}
-        </Typography>
-
-        <Box
-          sx={{
-            width: { xs: "100%", sm: "70%", md: "66%" },
-            display: "flex",
-            alignItems: "center",
-            flexDirection: { xs: "column", sm: "row" },
-          }}
-        >
-          {options === "Products" && (
-            <>
-              <SelectDropdown
-                label="Category"
-                sx={{
-                  marginRight: { xs: "0", sm: "15px" },
-                }}
-              />
-              <SelectDropdown
-                label="Sub Category"
-                sx={{
-                  marginRight: { xs: "0", sm: "15px" },
-                }}
-              />
-            </>
-          )}
-
-          {options !== "Stats" && (
-            <Button
-              variant="contained"
-              onClick={() => handleOpenForm(options)}
-              color="warning"
+          <Box>
+            <Typography
+              variant="h4"
+              gutterBottom
               sx={{
-                fontSize: { xs: "11px", sm: "12px", md: "16px" },
-                textTransform: "capitalize",
-                minWidth: "150px",
-                height: "56px",
-                marginTop: "16px !important",
-                marginBottom: "8px !important",
+                color: "#212121",
+                fontFamily: "'Roboto Serif', serif",
+                fontWeight: "Bold",
+                textAlign: "left", // Always left-align
+                fontSize: {
+                  xs: "1.2rem",
+                  sm: "1.5rem",
+                  md: "1.5rem",
+                  lg: "1.7rem",
+                },
               }}
             >
-              {`Add ${options}`}
-            </Button>
-          )}
-        </Box>
-      </Box>
+              {/* title */}
+              {options}
+            </Typography>
+          </Box>
+        </Grid2>
+        <Grid2
+          container
+          columnSpacing={0}
+          sx={{
+            order: { xs: 1, sm: 2 },
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Grid2 size={{ xs: "auto", sm: "grow" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              {options === "Products" && (
+                <>
+                  <SelectDropdown
+                    label="Category"
+                    sx={{
+                      minWidth: { xs: "9rem", sm: "12rem", md: "13rem" },
+                      marginRight: "20px",
+                    }}
+                    value={filterOptions.categories}
+                    config={{ field: "categories" }}
+                    handleEdit={handleChange}
+                    optionList={categoryData.categories}
+                  />
+                  <SelectDropdown
+                    label="Sub Category"
+                    sx={{
+                      minWidth: { xs: "9rem", sm: "12rem", md: "13rem" },
+                      marginRight: { xs: "0", sm: "20px" },
+                    }}
+                    value={filterOptions.subcategories}
+                    config={{ field: "subcategories" }}
+                    handleEdit={handleChange}
+                    optionList={categoryData.subcategories}
+                  />
+                </>
+              )}
+            </Box>
+          </Grid2>
+          <Grid2>
+            <Box>
+              {" "}
+              {options !== "Stats" && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleOpenForm(options)}
+                  color="warning"
+                  sx={{
+                    fontSize: { xs: "13px", sm: "14px", md: "16px" },
+                    textTransform: "capitalize",
+                    minWidth: "120px",
+                    height: "56px",
+                    marginTop: "16px !important",
+                    marginBottom: "8px !important",
+                  }}
+                >
+                  {/* btn */}
+                  {`Add ${options}`}
+                </Button>
+              )}
+            </Box>
+          </Grid2>
+        </Grid2>
+      </Grid2>
 
       {tabValue === "one" && (
         <ProductTable
-          products={products}
+          products={filterDataProducts}
           setProducts={setProducts}
           loading={productsloading}
           setLoading={setProductsLoading}
           showModal={showProductModal}
           setShowModal={setShowProductModal}
+          categories={categories}
         />
       )}
       {tabValue === "two" && (
