@@ -1,7 +1,7 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllCategories, imageUrl } from "../../api";
+import { imageUrl } from "../../api";
 
 const ExperticeSection = (props) => {
   const [categories, setCategories] = useState(props.categories || []);

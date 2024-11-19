@@ -13,7 +13,6 @@ import findUs1 from "../../assets/findus1.png";
 import { Element } from "react-scroll";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailIcon from "@mui/icons-material/Mail";
-import BusinessIcon from "@mui/icons-material/Business";
 
 const FindUs = () => {
   const [showMap, setShowMap] = useState(false);

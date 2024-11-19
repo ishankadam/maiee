@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CustomTable from "../../components/custom-table/customTable";
 import CreateCategory from "../../components/modal/createCategory";
-import { Button } from "@mui/material";
 import { deleteCategory } from "../../api";
 const ManageCategories = (props) => {
   const [categories, setCategories] = useState(props.categories || []);

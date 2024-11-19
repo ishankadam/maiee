@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid2,
-  Typography,
-  IconButton,
-  Link,
-  Box,
-} from "@mui/material";
-import { Twitter, Facebook, Instagram, LinkedIn } from "@mui/icons-material";
+import { Container, Grid2, Typography, Link, Box } from "@mui/material";
 import "../../css/home.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Footer = (props) => {
   const [categories, setCategories] = useState(props.categories || []);
