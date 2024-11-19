@@ -3,7 +3,10 @@ const cors = require("cors");
 const router = express.Router();
 const controller = require("../controller/controllers");
 const corsOptions = {
-  origin: [`http://localhost:3000`, `http://localhost:3001`], // Your frontend URL
+  origin: [
+    `http://localhost:3000`,
+    `http://localhost:3001, http://3.7.55.16:3000`,
+  ], // Your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
