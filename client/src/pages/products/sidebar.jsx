@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import "./sidebar.css";
+import { capitalizeWords } from "../../common";
 
 const Sidebar = ({
   categories,
@@ -55,7 +56,7 @@ const Sidebar = ({
                 onClick={() => handleCategoryClick(category.name)}
                 aria-expanded={productType.openCategory === category.name}
               >
-                <ListItemText primary={category.name} />
+                <ListItemText primary={capitalizeWords(category.name)} />
                 {category.subcategories.length > 0 &&
                   (productType.openCategory === category.name ? (
                     <ExpandLess sx={{ color: "black" }} />
@@ -83,7 +84,7 @@ const Sidebar = ({
                             : ""
                         }
                       >
-                        <ListItemText primary={subitem} />
+                        <ListItemText primary={capitalizeWords(subitem)} />
                       </ListItem>
                     ))}
                   </List>

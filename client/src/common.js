@@ -34,6 +34,10 @@ export const productType = [
   { label: "VELVET", value: "velvet" },
 ];
 
+export const capitalizeWords = (text) => {
+  return text.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
 export const basicSubcategories = [
   "COTTON",
   "NYLON",
