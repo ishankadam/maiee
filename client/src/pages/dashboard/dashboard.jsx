@@ -128,7 +128,6 @@ const Dashboard = () => {
     });
 
     setfilterDataProducts(filteredList);
-    console.log(filterOptions);
   }, [filterOptions, products]);
 
   return (

@@ -12,9 +12,9 @@ const statisticSchema = new mongoose.Schema({
       message: "Value must be a number",
     },
   },
-  designs: { type: String, required: true },
-  patterns: { type: String, required: true },
-  satisfiedClients: { type: String, required: true },
+  designs: { type: Number, required: true },
+  patterns: { type: Number, required: true },
+  satisfiedClients: { type: Number, required: true },
 });
 
 const Statistics = mongoose.model("Statistics", statisticSchema);

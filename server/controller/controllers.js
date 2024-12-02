@@ -76,16 +76,16 @@ const create_product = async (req, res) => {
       await newCreatedProduct.save();
 
       // Update statistics
-      const stats = await Statistics.findOne(); // Retrieve the first statistics document
-      if (stats) {
-        stats.patterns = (stats.patterns || 0) + 1; // Increment patterns
-        await stats.save(); // Save the updated stats document
-      } else {
-        // If no stats document exists, you may want to create one or log an error
-        console.error("No stats document found. Consider initializing one.");
-      }
     }
-
+    const stats = await Statistics.findOne(); // Retrieve the first statistics document
+    if (stats) {
+      console.log(productsData.length);
+      stats.patterns = (Number(stats.patterns) || 0) + productsData.length; // Increment patterns
+      await stats.save(); // Save the updated stats document
+    } else {
+      // If no stats document exists, you may want to create one or log an error
+      console.error("No stats document found. Consider initializing one.");
+    }
     const products = await Product.find({}); // Fetch all products
     res.status(201).send(products); // Send a 201 Created response
   } catch (error) {
@@ -139,7 +139,14 @@ const delete_product = async (req, res) => {
 
     // Fetch all products after deletion
     const allProducts = await Product.aggregate([{ $project: { _id: 0 } }]);
-
+    const stats = await Statistics.findOne(); // Retrieve the first statistics document
+    if (stats) {
+      stats.patterns = (Number(stats.patterns) || 0) - 1; // Increment patterns
+      await stats.save(); // Save the updated stats document
+    } else {
+      // If no stats document exists, you may want to create one or log an error
+      console.error("No stats document found. Consider initializing one.");
+    }
     // Send the updated list of products
     res.json(allProducts);
   } catch (error) {

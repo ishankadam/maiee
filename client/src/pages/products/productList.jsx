@@ -16,10 +16,9 @@ const ProductList = (props) => {
   const [displayedProducts, setDisplayedProducts] = useState([]);
 
   useEffect(() => {
-    const productsPerPage = page === 1 ? 12 : 10;
-    const startIdx = page === 1 ? 0 : 12 + (page - 2) * 10;
+    const productsPerPage = 12;
+    const startIdx = page === 1 ? 0 : 12 + (page - 2) * 12;
     const endIdx = startIdx + productsPerPage;
-
     // Filter products based on category and subcategory
     const filteredList = (props.products || []).filter((item) => {
       // If category is "all", return all products

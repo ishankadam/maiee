@@ -23,7 +23,7 @@ import ConfirmationModal from "../modal/confirmation-modal";
 const CustomTable = (props) => {
   const [rowData, setRowData] = useState(props.rowData);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const [deleteInfo, setDeleteInfo] = useState({
     row: 0,
     index: 0,
@@ -35,6 +35,7 @@ const CustomTable = (props) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   useEffect(() => {
     setLoading(props.loading);
   }, [props.loading]);
@@ -47,6 +48,11 @@ const CustomTable = (props) => {
   useEffect(() => {
     setRowData(props.rowData);
   }, [props.rowData]);
+
+  const paginatedData = rowData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   const getCell = (colDef, row, rowIndex, colIndex) => {
     let children;
@@ -181,8 +187,8 @@ const CustomTable = (props) => {
           <TableBody>
             {loading ? (
               <CircularProgress></CircularProgress>
-            ) : rowData?.length > 0 ? (
-              rowData.map(
+            ) : paginatedData?.length > 0 ? (
+              paginatedData.map(
                 (row, rowIndex) =>
                   row && (
                     <TableRow
