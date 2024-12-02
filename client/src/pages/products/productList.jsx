@@ -14,7 +14,7 @@ import { imageUrl } from "../../api";
 const ProductList = (props) => {
   const [page, setPage] = useState(1);
   const [displayedProducts, setDisplayedProducts] = useState([]);
-
+  const [filteredCount, setFilteredCount] = useState(0);
   useEffect(() => {
     const productsPerPage = 12;
     const startIdx = page === 1 ? 0 : 12 + (page - 2) * 12;
@@ -35,7 +35,8 @@ const ProductList = (props) => {
         item.subcategory === _.lowerCase(props.productType.subCategory)
       );
     });
-
+    console.log(filteredList.length);
+    setFilteredCount(filteredList.length);
     // Paginate the filtered list
     const productList = filteredList.slice(startIdx, endIdx);
     setDisplayedProducts(productList);
@@ -129,7 +130,7 @@ const ProductList = (props) => {
         color="primary"
         variant="outlined"
         shape="rounded"
-        count={Math.ceil((props.products?.length - 12) / 10) + 1}
+        count={Math.ceil((filteredCount - 12) / 12) + 1}
         page={page}
         onChange={handlePageChange}
         sx={{
