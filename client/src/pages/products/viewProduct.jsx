@@ -74,7 +74,8 @@ const ViewProduct = (props) => {
           sx={{
             fontWeight: "bold",
             color: "white",
-            fontSize: { xs: "32px", sm: "42px", md: "42px" },
+            fontSize: { xs: "26px", sm: "38px", md: "40px" },
+            mr: 2,
           }}
         >
           {props.data[index].name}
@@ -84,8 +85,8 @@ const ViewProduct = (props) => {
           onClick={handleClose}
           sx={(theme) => ({
             position: "absolute",
-            right: 4,
-            top: 2,
+            right: 0,
+            top: 0,
             color: theme.palette.grey[500],
           })}
         >
@@ -101,9 +102,10 @@ const ViewProduct = (props) => {
 
       <DialogContent
         sx={{
-          maxHeight: "80vh",
+          maxHeight: "100vh",
           overflowY: "auto",
           padding: "8px 16px !important",
+          // overflow: "hidden",
         }}
       >
         <Box
@@ -140,10 +142,10 @@ const ViewProduct = (props) => {
             src={`${imageUrl}${props.data[index].category}/${props.data[index].images}`}
             alt={`Image ${index + 1}`}
             sx={{
-              width: isMobile ? "100%" : "350px",
-              height: isMobile ? "350px" : "500px",
-              objectFit: "cover",
-              borderRadius: "10px",
+              width: { xs: "260px", sm: "320px", md: "350px" },
+              height: { xs: "300px", sm: "380px", md: "450px" },
+              objectFit: "fill",
+              borderRadius: "5px",
             }}
           />
           {!isMobile && (

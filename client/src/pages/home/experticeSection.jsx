@@ -56,6 +56,8 @@ const ExperticeSection = (props) => {
                   background: "#33376F",
                   position: "relative",
                   cursor: "pointer",
+                  // minHeight: "280px",
+                  // maxHeight: "280px",
                 }}
                 onClick={() => handlePageChange(item.name)}
                 role="button"
@@ -67,7 +69,7 @@ const ExperticeSection = (props) => {
                 <img
                   src={`${imageUrl}categories/${item.imgSrc}`}
                   alt={item.label || item.name} // Use meaningful alt text
-                  style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                  style={{ width: "100%", height: "240px", objectFit: "fill" }}
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop
                     e.target.src = "default-image.jpg"; // Fallback image
@@ -99,7 +101,7 @@ const ExperticeSection = (props) => {
                         xs: "0.9rem",
                         sm: "0.9rem",
                         md: "0.8rem",
-                        lg: "1.20rem",
+                        lg: "1rem",
                       },
                     }}
                   >
