@@ -98,13 +98,15 @@ const create_product = async (req, res) => {
 
 const get_all_data = async (req, res) => {
   try {
-    const product = await Product.find({}).select("-_id -__v"); // Exclude _id and __v fields
+    const product = await Product.find({})
+      .select("-_id -__v") // Exclude _id and __v fields
+      .sort({ createdAt: -1 }); // Sort by newest first
+
     res.status(200).json(product); // Send the result as JSON
   } catch (error) {
     res.status(500).json({ message: "Error fetching events", error });
   }
 };
-
 const get_all_categories = async (req, res) => {
   try {
     const category = await Category.find({}).select("-_id -__v"); // Exclude _id and __v fields

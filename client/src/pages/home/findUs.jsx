@@ -182,9 +182,10 @@ const FindUs = () => {
                           xs: "column",
                           sm: "column",
                           md: "row",
-                        }, // Stacks numbers on small screens, row on larger
+                        }, // Stacks numbers on b small screens, row on larger
                       }}
                     >
+                      <Box component="span">+91 b 9833390177 /</Box>
                       <Box component="span">+91 9029390400 /</Box>
                       <Box
                         component="span"
