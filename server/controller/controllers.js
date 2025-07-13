@@ -6,49 +6,54 @@ const fs = require("fs");
 const Testimonial = require("../schema/testimonials");
 const Statistics = require("../schema/stats");
 const parentDir = path.join(__dirname, "..");
+const multerS3 = require("multer-s3");
 
-// Set up storage for multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    let category;
-    try {
-      // Parse `req.body` based on whether it contains `products` or `categories`
-      if (req.body.products) {
-        const products = JSON.parse(req.body.products);
-        category = Array.isArray(products)
-          ? products[0].category
-          : products.category;
-      } else if (req.body.category) {
-        category = "categories";
-      } else if (req.body.testimonial) {
-        category = "testimonial";
-      } else {
-        return cb(new Error("Either products or categories data is required"));
-      }
+// config/s3.js
+const AWS = require("aws-sdk");
 
-      // Validate `category` existence
-      if (!category) {
-        return cb(new Error("Category is required"));
-      }
-
-      // Define and create the directory path
-      const dir = path.join(parentDir, "uploads", category);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-      cb(null, dir); // Set the directory as the destination
-    } catch (error) {
-      console.error("Error parsing data:", error);
-      return cb(new Error("Invalid data format in request body"));
-    }
-  },
-
-  filename: (req, file, cb) => {
-    cb(null, file.originalname); // Save file with its original name
-  },
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: "ap-south-1",
 });
 
-const upload = multer({ storage });
+module.exports = s3;
+
+// Set up storage for multer
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "maiee-assets",
+    acl: "public-read",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: function (req, file, cb) {
+      let folder = "uncategorized";
+
+      try {
+        if (req.body.products) {
+          const products = JSON.parse(req.body.products);
+          folder = Array.isArray(products)
+            ? products[0].category
+            : products.category;
+        } else if (req.body.category) {
+          folder = "categories";
+        } else if (req.body.testimonial) {
+          folder = "testimonials";
+        }
+
+        if (!folder) {
+          return cb(new Error("Category is required"));
+        }
+      } catch (err) {
+        return cb(new Error("Invalid request body format"));
+      }
+
+      cb(null, `${folder}/${Date.now()}-${file.originalname}`);
+    },
+  }),
+});
+
+module.exports = upload;
 
 const create_product = async (req, res) => {
   try {
