@@ -1,18 +1,18 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Box,
-  Link,
-  CardMedia,
-} from "@mui/material";
-import React, { useState } from "react";
-import "../../css/findUs.css";
-import findUs1 from "../../assets/findus1.png";
-import { Element } from "react-scroll";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import MailIcon from "@mui/icons-material/Mail";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import { Element } from "react-scroll";
+import findUs1 from "../../assets/findus1.png";
+import "../../css/findUs.css";
 
 const FindUs = () => {
   const [showMap, setShowMap] = useState(false);
@@ -185,17 +185,8 @@ const FindUs = () => {
                         }, // Stacks numbers on b small screens, row on larger
                       }}
                     >
-                      <Box component="span">+91 b 9833390177 /</Box>
-                      <Box component="span">+91 9029390400 /</Box>
-                      <Box
-                        component="span"
-                        sx={{
-                          marginLeft: { sm: "8px" },
-                          marginTop: { xs: "4px", sm: 0 },
-                        }} // Adds space between numbers
-                      >
-                        +91 9029390500
-                      </Box>
+                      <Box component="span">+91 98333 90177 /</Box>
+                      <Box component="span">+91 98338 43813 </Box>
                     </Box>
                   </Typography>
                 </CardContent>

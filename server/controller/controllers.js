@@ -6,39 +6,38 @@ const fs = require("fs");
 const Testimonial = require("../schema/testimonials");
 const Statistics = require("../schema/stats");
 const parentDir = path.join(__dirname, "..");
-const multerS3 = require("multer-s3");
+const { S3Client } = require("@aws-sdk/client-s3");
+const multerS3 = require("multer-s3-v3");
 
-// config/s3.js
-const AWS = require("aws-sdk");
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-  region: "ap-south-1",
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 });
 
-module.exports = s3;
-
-// Set up storage for multer
 const upload = multer({
   storage: multerS3({
-    s3: s3,
-    bucket: "maiee-assets",
-    acl: "public-read",
+    s3,
+    bucket: process.env.S3_BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: (req, file, cb) => {
+      cb(null, { fieldName: file.fieldname });
+    },
     key: function (req, file, cb) {
       let folder = "uncategorized";
-
       try {
         if (req.body.products) {
           const products = JSON.parse(req.body.products);
+          // If products is an array, use the first product's category; otherwise, use the object's category
           folder = Array.isArray(products)
-            ? products[0].category
-            : products.category;
+            ? products[0]?.category || "uncategorized"
+            : products.category || "uncategorized";
         } else if (req.body.category) {
           folder = "categories";
         } else if (req.body.testimonial) {
-          folder = "testimonials";
+          folder = "testimonial";
         }
 
         if (!folder) {
@@ -48,9 +47,20 @@ const upload = multer({
         return cb(new Error("Invalid request body format"));
       }
 
-      cb(null, `${folder}/${Date.now()}-${file.originalname}`);
+      cb(null, `${folder}/${file.originalname}`);
     },
   }),
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype.startsWith("image/") ||
+      file.mimetype.startsWith("video/")
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only images and videos are allowed"), false);
+    }
+  },
+  limits: { fileSize: 100 * 1024 * 1024 }, // 100 MB
 });
 
 module.exports = upload;
@@ -76,7 +86,7 @@ const create_product = async (req, res) => {
         name: file.originalname.split(".").slice(0, -1).join("."),
         category: productsData[0].category,
         subcategory: productsData[0].subcategory,
-        images: file.filename,
+        images: file.originalname,
       });
       await newCreatedProduct.save();
 
@@ -126,22 +136,7 @@ const delete_product = async (req, res) => {
     // Parse product from request body
     const deletedProduct = req.body.product;
     // Delete the product image from the server
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      deletedProduct.category,
-      deletedProduct.images[0]
-    );
-
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
-
-    // Delete the product from the database
+    // The image is now in S3, so we just need to delete the product
     await Product.deleteOne({ productId: Number(deletedProduct.productId) });
 
     // Fetch all products after deletion
@@ -168,21 +163,7 @@ const delete_category = async (req, res) => {
     const deletedCategory = req.body.category;
 
     // Delete the Category image from the server
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      "categories",
-      deletedCategory.imgSrc
-    );
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
-
-    // Delete the Category from the database
+    // The image is now in S3, so we just need to delete the category
     await Category.deleteOne({
       categoryId: Number(deletedCategory.categoryId),
     });
@@ -206,20 +187,8 @@ const edit_product = async (req, res) => {
     // Destructure productId and prepare updated product data
     const { productId, ...editedProduct } = editData;
     const productToBeEdited = await Product.findOne({ productId: productId });
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      productToBeEdited.category,
-      productToBeEdited.images[0]
-    );
+    // The image is now in S3, so we don't need to delete it locally
 
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
     // Check if productId is defined
     if (!productId) {
       return res.status(400).send({ error: "productId is required" });
@@ -230,7 +199,7 @@ const edit_product = async (req, res) => {
       productId, // Ensure productId is included in the updated product data
       ...editedProduct,
       name: images[0].originalname.split(".").slice(0, -1).join("."), // name without extension
-      images: images.map((image) => image.originalname), // images with extensions
+      images: images.map((image) => image.location), // images with extensions (S3 keys)
     };
 
     // Replace or insert the product with upsert
@@ -260,8 +229,8 @@ const create_category = async (req, res) => {
     }
     const imgSrc =
       Array.isArray(images) && images.length > 0
-        ? images[0].filename
-        : images.filename;
+        ? images[0].originalname // Use S3 key
+        : images.originalname; // Use S3 key
 
     // Generate a unique product ID for each product
     const newCreatedCategory = new Category({
@@ -291,19 +260,8 @@ const edit_category = async (req, res) => {
     const categoryToBeEdited = await Category.findOne({
       categoryId: categoryId,
     });
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      "categories",
-      categoryToBeEdited.imgSrc
-    );
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
+    // The image is now in S3, so we don't need to delete it locally
+
     // Check if req.files is an object (field names mapped to arrays) or an array directly
     const images = Array.isArray(req.files)
       ? req.files // If `req.files` is directly an array
@@ -313,7 +271,7 @@ const edit_category = async (req, res) => {
     const updatedCategory = {
       categoryId, // Add categoryId to retain it in the document
       ...editedCategory,
-      imgSrc: images.map((image) => image.originalname)[0], // Array of filenames
+      imgSrc: images.map((image) => image.location)[0], // Array of S3 keys
     };
 
     // Replace or insert the category with upsert
@@ -348,21 +306,7 @@ const delete_testimonial = async (req, res) => {
     const deletedTestimonial = req.body.testimonial;
 
     // Delete the testimonial image from the server
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      "testimonial",
-      deletedTestimonial.image
-    );
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
-
-    // Delete the Category from the database
+    // The image is now in S3, so we just need to delete the testimonial
     await Testimonial.deleteOne({
       testimonialId: Number(deletedTestimonial.testimonialId),
     });
@@ -392,8 +336,8 @@ const create_testimonial = async (req, res) => {
     }
     const image =
       Array.isArray(images) && images.length > 0
-        ? images[0].filename
-        : images.filename;
+        ? images[0].originalname // Use S3 key
+        : images.originalname; // Use S3 key
 
     // Generate a unique product ID for each product
     const newCreatedtestimonial = new Testimonial({
@@ -421,19 +365,8 @@ const edit_testimonial = async (req, res) => {
     const testimonialToBeEdited = await Testimonial.findOne({
       testimonialId: testimonialId,
     });
-    const imagePath = path.join(
-      parentDir,
-      "uploads",
-      "testimonial",
-      testimonialToBeEdited.image
-    );
-    fs.unlink(imagePath, (err) => {
-      if (err) {
-        console.error("Error deleting image file:", err);
-      } else {
-        console.log("Image file deleted successfully");
-      }
-    });
+    // The image is now in S3, so we don't need to delete it locally
+
     // Check if req.files is an object (field names mapped to arrays) or an array directly
     const images = Array.isArray(req.files)
       ? req.files // If `req.files` is directly an array
@@ -443,7 +376,7 @@ const edit_testimonial = async (req, res) => {
     const updatedTestimonial = {
       testimonialId, // Add categoryId to retain it in the document
       ...editedTestimonial,
-      image: images.map((image) => image.originalname)[0], // Array of filenames
+      image: images.map((image) => image.location)[0], // Array of S3 keys
     };
 
     // Replace or insert the category with upsert

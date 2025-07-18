@@ -16,6 +16,10 @@ const ExperticeSection = (props) => {
     navigate("/product", { state: { item } }); // Pass item state if needed
   };
 
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
+
   return (
     <Box
       sx={{
@@ -67,10 +71,24 @@ const ExperticeSection = (props) => {
                 <img
                   src={`${imageUrl}categories/${item.imgSrc}`}
                   alt={item.label || item.name} // Use meaningful alt text
-                  style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                  style={{
+                    width: "100%",
+                    height: "clamp(120px, 20vw, 220px)", // responsive: min 120px, max 220px, scales with viewport
+                    objectFit: "cover",
+                  }}
+                  sx={{
+                    height: {
+                      xs: "120px",
+                      sm: "160px",
+                      md: "180px",
+                      lg: "220px",
+                    },
+                  }}
                   onError={(e) => {
-                    e.target.onerror = null; // Prevent infinite loop
-                    e.target.src = "default-image.jpg"; // Fallback image
+                    if (!e.target.src.includes("@default-image.png")) {
+                      e.target.onerror = null;
+                      e.target.src = "/@default-image.png";
+                    }
                   }}
                 />
                 <Box

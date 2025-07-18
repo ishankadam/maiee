@@ -19,7 +19,16 @@ router.get("/getData", controller.get_all_data);
 router.get("/getCategories", controller.get_all_categories);
 router.post(
   "/createProduct",
-  controller.upload.array("images"),
+  (req, res, next) => {
+    console.log("Before upload middleware");
+    next();
+  },
+  controller.upload.array("images"), // handles S3 multi-image upload
+  (err, req, res, next) => {
+    // multer error handler
+    console.error("Upload error:", err);
+    res.status(500).json({ message: err.message });
+  },
   controller.create_product
 );
 router.put(

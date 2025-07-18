@@ -7,10 +7,27 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+
+// ✅ CORS options with origin normalization and logging
+const corsOptions = {
+  origin: (origin, callback) => {
+    const normalizedOrigin = origin?.replace(/\/$/, "");
+
+    if (!origin || allowedOrigins.includes(normalizedOrigin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json()); // Only need to call this once
 
 // MongoDB Connection
