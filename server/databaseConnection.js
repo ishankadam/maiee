@@ -7,7 +7,11 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "https://maiee.onrender.com",
+];
 
 // ✅ CORS options with origin normalization and logging
 const corsOptions = {
