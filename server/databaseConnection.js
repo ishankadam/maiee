@@ -1,9 +1,11 @@
-const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const path = require("path");
+import bodyParser from "body-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import mongoose from "mongoose";
+import path from "path";
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -15,67 +17,38 @@ const allowedOrigins = [
   "https://maieelace.vercel.app",
   "https://maieelace.netlify.app",
   "https://maieelace.com",
-  "https://maiee.onrender.com/api",
 ];
 
-// ✅ CORS options with origin normalization and logging
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-
-    const normalizedOrigin = origin.replace(/\/$/, "");
-
-    if (allowedOrigins.includes(normalizedOrigin)) {
-      callback(null, true);
-    } else {
-      console.log(`CORS blocked origin: ${origin}`);
+    const normalized = origin.replace(/\/$/, "");
+    if (allowedOrigins.includes(normalized)) callback(null, true);
+    else {
+      console.log(`Blocked by CORS: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-    "Origin",
-  ],
   credentials: true,
-  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Origin", "Accept"],
+  optionsSuccessStatus: 200,
 };
-// Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
 app.use(cors(corsOptions));
-app.use(express.json()); // Only need to call this once
+app.options("*", cors(corsOptions)); // important to handle preflight early
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Handle preflight requests
-app.options("*", cors(corsOptions));
+mongoose.connect(process.env.MONGODB_URL);
+mongoose.connection.on("connected", () => console.log("Mongoose connected"));
 
-// MongoDB Connection
-const uri = process.env.MONGODB_URL;
-mongoose.connect(uri, {});
-
-mongoose.connection.on("connected", () => {
-  console.log("Mongoose is connected!!!!");
-});
-
-const ProductRoutes = require("./routes/events");
+import ProductRoutes from "./routes/events.js";
 app.use("/api", ProductRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Static files
-app.use(express.static("uploads"));
-
-// Error handling
 app.use((error, req, res, next) => {
-  const status = error.status || 500;
-  const message = error.message || "Something went wrong.";
-  res.status(status).json({ message: message });
+  res.status(error.status || 500).json({ message: error.message });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is starting at ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
