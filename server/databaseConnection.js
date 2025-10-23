@@ -11,28 +11,45 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://maiee.onrender.com",
+  "https://maieelace.onrender.com",
+  "https://maieelace.vercel.app",
+  "https://maieelace.netlify.app",
 ];
 
 // ✅ CORS options with origin normalization and logging
 const corsOptions = {
   origin: (origin, callback) => {
-    const normalizedOrigin = origin?.replace(/\/$/, "");
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
 
-    if (!origin || allowedOrigins.includes(normalizedOrigin)) {
+    const normalizedOrigin = origin.replace(/\/$/, "");
+
+    if (allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
+      console.log(`CORS blocked origin: ${origin}`);
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+  ],
   credentials: true,
+  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
 };
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 app.use(express.json()); // Only need to call this once
+
+// Handle preflight requests
+app.options("*", cors(corsOptions));
 
 // MongoDB Connection
 const uri = process.env.MONGODB_URL;
