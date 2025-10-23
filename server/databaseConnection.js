@@ -14,6 +14,7 @@ const allowedOrigins = [
   "https://maieelace.onrender.com",
   "https://maieelace.vercel.app",
   "https://maieelace.netlify.app",
+  "https://maieelace.com",
 ];
 
 // ✅ CORS options with origin normalization and logging
