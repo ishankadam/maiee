@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
   CardMedia,
-  Typography,
-  Pagination,
   Grid2,
+  Pagination,
+  Typography,
 } from "@mui/material";
-import "./productList.css";
 import _ from "lodash";
+import React, { useEffect, useState } from "react";
 import { imageUrl } from "../../api";
+import "./productList.css";
 
 const ProductList = (props) => {
   const [page, setPage] = useState(1);
@@ -35,7 +35,7 @@ const ProductList = (props) => {
         item.subcategory === _.lowerCase(props.productType.subCategory)
       );
     });
-    console.log(filteredList.length);
+    filteredList.length;
     setFilteredCount(filteredList.length);
     // Paginate the filtered list
     const productList = filteredList.slice(startIdx, endIdx);
