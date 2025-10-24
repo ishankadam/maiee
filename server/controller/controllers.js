@@ -94,7 +94,6 @@ const create_product = async (req, res) => {
     }
     const stats = await Statistics.findOne(); // Retrieve the first statistics document
     if (stats) {
-      console.log(productsData.length);
       stats.patterns = (Number(stats.patterns) || 0) + productsData.length; // Increment patterns
       await stats.save(); // Save the updated stats document
     } else {

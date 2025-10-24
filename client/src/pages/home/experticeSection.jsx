@@ -16,10 +16,6 @@ const ExperticeSection = (props) => {
     navigate("/product", { state: { item } }); // Pass item state if needed
   };
 
-  useEffect(() => {
-    console.log(categories);
-  }, [categories]);
-
   return (
     <Box
       sx={{

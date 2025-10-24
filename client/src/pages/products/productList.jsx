@@ -35,7 +35,6 @@ const ProductList = (props) => {
         item.subcategory === _.lowerCase(props.productType.subCategory)
       );
     });
-    filteredList.length;
     setFilteredCount(filteredList.length);
     // Paginate the filtered list
     const productList = filteredList.slice(startIdx, endIdx);
